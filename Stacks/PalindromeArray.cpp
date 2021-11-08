@@ -31,7 +31,6 @@ class Palindrome {
     void push2(char x) {
         arr2[++top2] = x;
     }
-    
     bool checker() {
         bool check;
         for (int i = top1; i >= 0; i--) {

@@ -64,9 +64,12 @@ class CircularQue {
             cout << "\nEmpty\n";
         }
         else {
-            for (int i = front; i < size; i++) {
-                cout << que[(i + 1) % size] << " ";
+            int i = front, j = rear;
+            while (i != j) {
+                cout << que[i] << " ";
+                i = ((i + 1) % size);
             }
+            cout << que[i];
         }
     }
 };

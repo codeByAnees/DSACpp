@@ -52,8 +52,11 @@ bool checker() {
     node *a = top1, *b = top2;
     while (a != NULL) {
         if (a -> letter == b -> letter) {
-            a = a -> next;
-            b = b -> next;
+            node *c = a;
+            node *d = b;
+            a = c -> next;
+            b = d -> next;
+            delete c, d;
         }
         else {
             check = false;

@@ -41,12 +41,12 @@ class DEQ {
         }
         else {
             rear++;
-            for (int i = rear; i >= front; i--) {
+            for (int i = rear; i > front; i--) {
                 que[i] = que[i - 1];
             }
         }
-        que[front] = x;
-        
+        que[front] = x;  
+
     }
 
     void addToLast(int x) {
@@ -55,7 +55,7 @@ class DEQ {
         }
         else if (front != 0 && rear == size - 1) {
             front--;
-            for (int i = front; i <= rear; i++) {
+            for (int i = front; i < rear; i++) {
                 que[i] = que[i + 1];
             }
         }
