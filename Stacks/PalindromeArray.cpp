@@ -32,10 +32,11 @@ class Palindrome {
         arr2[++top2] = x;
     }
     bool checker() {
-        bool check;
-        for (int i = top1; i >= 0; i--) {
-            if (arr1[i] == arr2[i]) {
-                check = true;
+        bool check = true;
+        for (int i = 0; i < size; i++) {
+            if (arr1[top1] == arr2[top2]) {
+                arr1[--top1];
+                arr2[--top2];
             }
             else {
                 check = false;

@@ -3,14 +3,14 @@ using std::cin;
 using std::cout;
 using std::endl;
 using std::string;
-class SingleBalenced {
+class MultipleBalenced {
     public:
     string exp;
     char *sta;
     int top;
     int size;
 
-    SingleBalenced() {
+    MultipleBalenced() {
         cout << "\nEnter expression: ";
         cin >> exp;
         size = exp.length();
@@ -40,7 +40,7 @@ class SingleBalenced {
 };
 
 int main() {
-    SingleBalenced s;
+    MultipleBalenced s;
     for (int i = 0; i < s.size; i++) {
         if ((s.sta[s.top] == '(') && (s.exp[i] == '{' || s.exp[i] == '[')) {
             cout << "\nAgainst priority order. ";
