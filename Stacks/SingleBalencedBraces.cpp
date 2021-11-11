@@ -11,7 +11,7 @@ class SingleBalenced {
     int size;
 
     SingleBalenced() {
-        cout << "\nEnter expression: ";
+        cout << "\nEnter single type brackets expression: ";
         cin >> exp;
         size = exp.length();
         sta = new char[size];
@@ -41,5 +41,5 @@ int main() {
     if (s.isEmpty()) {
         cout << "Valid Expression!";
     }
-    else cout << "Invalid!";
+    else cout << "Invalid Expression!";
 }

@@ -1,61 +1,62 @@
+// When I run this program on DEV-C++ or on VS Code it gives me error
+// But when I run it on online compiler, it works as it should be.
 #include<iostream>
 using std::cin;
 using std::cout;
-using std::string;
 using std::endl;
+using std::string;
 
-struct node {
+struct Node {
     char letter;
-    node *next;
+    Node *forward;
 };
 
-node *top1 = NULL, *tail = NULL, *current = NULL;
-node *top2 = NULL, *end = NULL;
+string word;
+Node *top_1 = NULL, *tail_1 = NULL, *current = NULL;
+Node *top_2 = NULL, *tail_2 = NULL;
 
-
-void stack_1() {
+void sta_1() {
     cout << "\n\t\tPalindrome Checker\n";
-    string word;
     cout << "Enter a word: ";
     cin >> word;
+
     for (int i = 0; i < word.length(); i++) {
-        current = new node;
+        current = new Node;
         current -> letter = word[i];
-        if (top1 == NULL) {
-            top1 = tail = current;
+        if (top_1 == NULL) {
+            top_1 = tail_1 = current;
         }
         else {
-            current -> next = top1;
-            top1 = current;
+            current -> forward = top_1;
+            top_1 = current;
         }
     }
 }
 
-void stack_2() {
-    node *a = top1;
+void sta_2() {
+    Node *a = top_1;
     while (a != NULL) {
-        current = new node;
+        current = new Node;
         current -> letter = a -> letter;
-        if (top2 == NULL) {
-            top2 = end = current;
+        if (top_2 == NULL) {
+            top_2 = tail_2 = current;
         }
         else {
-            current -> next = top2;
-            top2 = current;
+            current -> forward = top_2;
+            top_2 = current;
         }
-        a = a -> next;
+        a = a -> forward;
     }
 }
 
-bool checker() {
+bool check() {
     bool check = true;
-    node *a = top1, *b = top2;
+    Node *a = top_1, *b = top_2;
     while (a != NULL) {
         if (a -> letter == b -> letter) {
-            node *c = a;
-            node *d = b;
-            a = c -> next;
-            b = d -> next;
+            Node *c = a, *d = b;
+            a = c -> forward;
+            b = d -> forward;
             delete c, d;
         }
         else {
@@ -66,13 +67,10 @@ bool checker() {
     return check;
 }
 
-
 int main() {
-    stack_1();
-    stack_2();
-    bool check = checker();
-    if (check == true) {
-        cout << "PALINDROME!";
-    }
-    else cout << "Not PALINDROME";
+    sta_1();
+    sta_2();
+    bool ch = check();
+    if (ch == true) cout << "YES, It's a PALINDROME";
+    else cout << "Not a Palindrome";
 }

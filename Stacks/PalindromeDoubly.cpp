@@ -55,8 +55,7 @@ bool checker() {
     node *a = top1, *b = top2;
     while (a != NULL) {
         if (a -> letter == b -> letter) {
-            node *c = a;
-            node *d = b;
+            node *c = a, *d = b;
             a = c -> prev;
             b = d -> prev;
             delete c, d;
@@ -74,6 +73,6 @@ int main() {
     stack_2();
     bool check = checker();
     if (check == true)
-        cout << "PALINDROME!";
+        cout << "YES, It's a PALINDROME";
     else cout << "Not PALINDROME";
 }

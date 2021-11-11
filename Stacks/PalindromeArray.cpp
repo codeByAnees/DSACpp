@@ -57,6 +57,6 @@ int main() {
     }
     bool check = p.checker();
     if (check == true) 
-        cout << "PALINDROME!" << endl;
+        cout << "YES, It's a PALINDROME" << endl;
     else cout << "Not a PALINDROME!" << endl;
 }

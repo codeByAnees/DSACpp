@@ -40,20 +40,26 @@ class MultipleBalenced {
 };
 
 int main() {
-    MultipleBalenced s;
-    for (int i = 0; i < s.size; i++) {
-        if ((s.sta[s.top] == '(') && (s.exp[i] == '{' || s.exp[i] == '[')) {
-            cout << "\nAgainst priority order. ";
-            break;
-        } 
-        else if (s.sta[s.top] == '{' && s.exp[i] == '[') {
-            cout << "\nAgainst priority order. ";
-            break;
+    MultipleBalenced m;
+        for (int i = 0; i < m.size; i++) {
+            if ((m.sta[m.top] == '(') && (m.exp[i] == '{' || m.exp[i] == '[')) {
+                cout << "\nAgainst priority order. ";
+                break;
+            } 
+            else if (m.sta[m.top] == '{' && m.exp[i] == '[') {
+                cout << "\nAgainst priority order. ";
+                break;
+            }
+            else if ((m.exp[i] == ')' || m.exp[i] == '}' || m.exp[i] == ']') && (m.isEmpty())) {
+                m.top = 100;
+                break;
+            }
+            else {
+                m.pushPop(m.exp[i]);
+            }
         }
-        else s.pushPop(s.exp[i]);
+        if (m.isEmpty()) {
+            cout << "Valid Expression!";
+        }
+        else cout << "Invalid Expression!";
     }
-    if (s.isEmpty()) {
-        cout << "Valid Expression!";
-    }
-    else cout << "Invalid!";
-}

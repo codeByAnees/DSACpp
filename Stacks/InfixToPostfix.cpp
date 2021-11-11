@@ -19,46 +19,37 @@ class Infix {
         sta = new char[size];
     }
 
-    int isOperator(char input) {
-        switch (input) {
-        case '+':
-            return 1;
-        case '-':
-            return 1;
-        case '*':
-            return 1;
-        case '/':
-            return 1;
-        case '(':
-            return 1;
+    bool isOperator(char inp) {
+        if (inp == '+' || inp == '-' || inp == '*' || inp == '/' || inp == '^' || inp == '(') {
+            return true;
         }
-        return 0;
+        else return false;
     }
 
-    int inPrec(char input) {
-        switch (input) {
-        case '+':
-        case '-':
+    int inputPrec(char inp) {
+        if (inp == '+' || inp == '-') {
             return 2;
-        case '*':
-        case '/':
-            return 4;
-        case '(':
-            return 0;
         }
+        else if (inp == '*' || inp == '/') {
+            return 4;
+        }
+        else if (inp == '^') {
+            return 6;
+        }
+        else return 0;
     }
 
-    int staPrec(char input) {
-        switch (input) {
-        case '+':
-        case '-':
+    int stackPrec(char inp) {
+        if (inp == '+' || inp == '-') {
             return 1;
-        case '*':
-        case '/':
-            return 3;
-        case '(':
-            return 10;
         }
+        else if (inp == '*' || inp == '/') {
+            return 3;
+        }
+        else if (inp == '^') {
+            return 7;
+        }
+        else return 10;
     }
 
     void converter() {
@@ -73,12 +64,12 @@ class Infix {
                 if (exp[i] == '(') {
                     sta[++top] = exp[i];
                 }
-                else if (staPrec(exp[i]) > inPrec(sta[top])) {
+                else if (stackPrec(exp[i]) > inputPrec(sta[top])) {
                     sta[++top] = exp[i];
                 }
                 else {
                     cout << sta[top--];
-                    while (staPrec(exp[i]) < inPrec(sta[top])) {
+                    while (stackPrec(exp[i]) < inputPrec(sta[top])) {
                         cout << sta[top--];
                     }
                     sta[++top] = exp[i];
