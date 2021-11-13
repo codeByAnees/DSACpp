@@ -43,7 +43,19 @@ BST *search(int x) {
     return p;
 }
 
-BST *search1(int x) {
+// BST *search1(int x) {
+//     BST *p = root, *k = NULL;
+//     while (p -> id != x && p != NULL) {
+//         k = p;
+//         if (x > p -> id)
+//             p = p -> right;
+//         else p = p -> left;
+//     }
+//     return k;
+// }
+
+
+void deletion(int x) {
     BST *p = root, *k = NULL;
     while (p -> id != x && p != NULL) {
         k = p;
@@ -51,13 +63,8 @@ BST *search1(int x) {
             p = p -> right;
         else p = p -> left;
     }
-    return k;
-}
-
-
-void deletion(int x) {
-    BST *p = search(x);
-    BST *k = search1(x);
+    // BST *p = search(x);
+    // BST *k = search1(x);
     if (p -> right == NULL && p -> left == NULL) {
         if (k -> right == p) {
             k -> right = NULL;
@@ -79,6 +86,16 @@ void deletion(int x) {
                 delete p;
             }
         }
+        else {
+            if (k -> right != NULL && p -> right != NULL) {
+                k -> right = p -> right;
+                delete p;
+            }
+            else {
+                k -> left = p -> right;
+                delete p;
+            }
+        }
     }
     else {
         BST *q = p -> right, *d = NULL;
@@ -89,11 +106,11 @@ void deletion(int x) {
         p -> id = q -> id;
         if (q -> right != NULL) {
             d -> left = q -> right;
-            delete p;
+            delete q;
         }
         else {
             d -> left = NULL;
-            delete p;
+            delete q;
         }
     }
 }
