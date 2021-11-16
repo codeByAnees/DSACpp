@@ -109,8 +109,16 @@ void deletion(int x) {
             delete q;
         }
         else {
-            d -> left = NULL;
-            delete q;
+            if (p -> right != NULL) {
+                d -> left = NULL;
+                delete q;
+            }
+            else {
+                p -> right = NULL;
+                delete q;
+            }
+            //p -> right = NULL;
+            //delete q;
         }
     }
 }
@@ -124,20 +132,22 @@ void PreOrder(BST *p) {
 }
 
 int main() {
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 12; i++) {
         insert();
     }
     int x, y;
     cout << "\nEnter a value to search: ";
     cin >> x;
     BST *a = search(x);
-    if (a -> id == x)
-        cout << "\nValue found!";
-    else cout << "\nNo such value!";
+    if (a -> id != x || a == NULL)
+        cout << "\nValue not found!";
+    else cout << "\nValue found!";
     cout << endl;
     PreOrder(root);
-    cout << "\nEnter a value to del: ";
-    cin >> y;
-    deletion(y);
-    PreOrder(root);
+    for (int i = 0; i < 5; i++) {
+        cout << "\nEnter a value to del: ";
+        cin >> y;
+        deletion(y);
+        PreOrder(root);
+    }
 }

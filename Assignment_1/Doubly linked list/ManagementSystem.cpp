@@ -21,26 +21,26 @@ struct car {
     ride *rideDetails = NULL;
 };
 
-car *head = NULL, *tail = NULL, *current = NULL;
+car *head = NULL, *tail = NULL, *curr = NULL;
 
 void insertCarInfo() {
-    current = new car;
+    curr = new car;
     cout << "\n\t\tEnter Car Details";
     cout << "\nEnter your name: ";
-    cin >> current -> driverName;
+    cin >> curr -> driverName;
     cout << "Enter car name: ";
-    cin >> current -> carName;
+    cin >> curr -> carName;
     cout << "Enter Reg No: ";
-    cin >> current -> regNo;
+    cin >> curr -> regNo;
     cout << "Enter car type(1/2): ";
-    cin >> current -> carType;
+    cin >> curr -> carType;
     if (head == NULL) {
-        head = tail = current;
+        head = tail = curr;
     }
     else {
-        tail -> next = current;
-        current -> prev = tail;
-        tail = current;
+        tail -> next = curr;
+        curr -> prev = tail;
+        tail = curr;
     }
     cout << "\nRegistration Successful!\n";
 }
