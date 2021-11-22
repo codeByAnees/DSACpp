@@ -33,26 +33,23 @@ void insert() {
     }
 }
 
-BST *search(int x) {
+bool search(int x) {
     BST *p = root;
     while (p -> id != x && p != NULL) {
-        if (x > p -> id)
+        if (x > p -> id) {
             p = p -> right;
-        else p = p -> left;
+        }
+        else {
+            p = p -> left;
+        }
     }
-    return p;
+    if (p != NULL) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
-
-// BST *search1(int x) {
-//     BST *p = root, *k = NULL;
-//     while (p -> id != x && p != NULL) {
-//         k = p;
-//         if (x > p -> id)
-//             p = p -> right;
-//         else p = p -> left;
-//     }
-//     return k;
-// }
 
 
 void deletion(int x) {
@@ -63,8 +60,7 @@ void deletion(int x) {
             p = p -> right;
         else p = p -> left;
     }
-    // BST *p = search(x);
-    // BST *k = search1(x);
+
     if (p -> right == NULL && p -> left == NULL) {
         if (k -> right == p) {
             k -> right = NULL;
@@ -76,23 +72,25 @@ void deletion(int x) {
         }
     }
     else if (p -> right == NULL || p -> left == NULL) {
-        if (p -> right == NULL) {
-            if (k -> left != NULL && p -> left != NULL) {
-                k -> left = p -> left;
-                delete p;
-            }
-            else {
-                k -> right = p -> left;
-                delete p;
-            }
-        }
-        else {
+        if (p -> left == NULL) {
             if (k -> right != NULL && p -> right != NULL) {
                 k -> right = p -> right;
                 delete p;
             }
-            else {
+            else if (k -> left != NULL && p -> right != NULL){
                 k -> left = p -> right;
+                cout << "P -->" << p -> id << endl;
+                cout << "k -->"<< k -> id << endl;
+                delete p;
+            }
+        }
+        else {
+            if (k -> left != NULL && p -> left != NULL) {
+                k -> left = p -> left;
+                delete p;
+            }
+            else if (k -> right != NULL && p -> left != NULL){
+                k -> right = p -> left;
                 delete p;
             }
         }
@@ -138,16 +136,20 @@ int main() {
     int x, y;
     cout << "\nEnter a value to search: ";
     cin >> x;
-    BST *a = search(x);
-    if (a -> id != x || a == NULL)
+    //BST *a = search(x);
+    bool a = search(x);
+    if (a == true) {
+        cout << "\nValue found!";
+    }
+    else {
         cout << "\nValue not found!";
-    else cout << "\nValue found!";
+    }
     cout << endl;
     PreOrder(root);
-    for (int i = 0; i < 5; i++) {
+    //for (int i = 0; i < 15; i++) {
         cout << "\nEnter a value to del: ";
         cin >> y;
         deletion(y);
         PreOrder(root);
-    }
+    //}
 }
