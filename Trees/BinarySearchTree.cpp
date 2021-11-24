@@ -12,7 +12,7 @@ BST *root = NULL, *current = NULL;
 
 void insert() {
     current = new BST;
-    cout << "Enter value: ";
+    cout << "\nEnter a value: ";
     cin >> current -> id;
     if (root == NULL) {
         root = current;
@@ -33,7 +33,10 @@ void insert() {
     }
 }
 
-bool search(int x) {
+BST *search() {
+    int x;
+    cout << "\nEnter a value to search: ";
+    cin >> x;
     BST *p = root;
     while (p -> id != x && p != NULL) {
         if (x > p -> id) {
@@ -43,12 +46,7 @@ bool search(int x) {
             p = p -> left;
         }
     }
-    if (p != NULL) {
-        return true;
-    }
-    else {
-        return false;
-    }
+    return p;
 }
 
 
@@ -136,26 +134,46 @@ void PreOrder(BST *p) {
 }
 
 int main() {
-    for (int i = 0; i < 3; i++) {
-        insert();
-    }
-    int x, y;
-    cout << "\nEnter a value to search: ";
-    cin >> x;
-    //BST *a = search(x);
-    bool a = search(x);
-    if (a == true) {
-        cout << "\nValue found!";
-    }
-    else {
-        cout << "\nValue not found!";
-    }
-    cout << endl;
-    PreOrder(root);
-    for (int i = 0; i < 3; i++) {
-        cout << "\nEnter a value to del: ";
-        cin >> y;
-        deletion(y);
-        PreOrder(root);
-    }
+    int x;
+    do {
+        cout << "\n\t\tBinary Search Tree\n";
+        cout << "\nEnter 1 to insert \nEnter 2 to search \nEnter 3 to delete "
+                "\nEnter 4 to display \nEnter 0 to QUIT--> ";
+        cin >> x;
+        switch (x) {
+            case 0:
+                break;
+            case 1:
+                insert();
+                cout << "\nSuccessful!\n";
+                break;
+            case 2:
+                BST *a;
+                a = search();
+                if (a != NULL) {
+                    cout << "\nValue found!\n";
+                }
+                else cout << "\nValue not found!\n";
+                break;
+            case 3:
+                int z;
+                cout << endl;
+                PreOrder(root);
+                cout << endl;
+                cout << "\nEnter a value to delete: ";
+                cin >> z;
+                deletion(z);
+                cout << "\nSuccessful!\n";
+                PreOrder(root);
+                cout << endl;
+                break;
+            case 4:
+                cout << endl;
+                PreOrder(root);
+                cout << endl;
+                break;
+            default:
+                cout << "\nWrong input\n";
+        }
+    } while (x != 0);
 }
