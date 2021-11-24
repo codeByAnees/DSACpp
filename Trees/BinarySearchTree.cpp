@@ -56,40 +56,38 @@ void deletion(int x) {
     BST *p = root, *k = NULL;
     while (p -> id != x && p != NULL) {
         k = p;
-        if (x > p -> id)
+        if (x > p -> id) {
             p = p -> right;
+        }
         else p = p -> left;
     }
-
     if (p -> right == NULL && p -> left == NULL) {
         if (k -> right == p) {
-            k -> right = NULL;
             delete p;
+            k -> right = NULL;
         }
         else {
-            k -> left = NULL;
             delete p;
+            k -> left = NULL;
         }
     }
     else if (p -> right == NULL || p -> left == NULL) {
         if (p -> left == NULL) {
-            if (k -> right != NULL && p -> right != NULL) {
+            if (k -> right == p && p -> right != NULL) {
                 k -> right = p -> right;
                 delete p;
             }
-            else if (k -> left != NULL && p -> right != NULL){
+            else if (k -> left == p && p -> right != NULL) {
                 k -> left = p -> right;
-                cout << "P -->" << p -> id << endl;
-                cout << "k -->"<< k -> id << endl;
                 delete p;
             }
         }
         else {
-            if (k -> left != NULL && p -> left != NULL) {
+            if (k -> left == p && p -> left != NULL) {
                 k -> left = p -> left;
                 delete p;
             }
-            else if (k -> right != NULL && p -> left != NULL){
+            else if (k -> right == p && p -> left != NULL) {
                 k -> right = p -> left;
                 delete p;
             }
@@ -102,7 +100,17 @@ void deletion(int x) {
             q = q -> left;
         }
         p -> id = q -> id;
-        if (q -> right != NULL) {
+        if (q -> left == NULL) {
+            if (q -> right == NULL) {
+                p -> right = NULL;
+                delete q;
+            }
+            else {
+                p -> right = q -> right;
+                delete q;
+            }
+        }
+        else if (q -> right != NULL) {
             d -> left = q -> right;
             delete q;
         }
@@ -115,8 +123,6 @@ void deletion(int x) {
                 p -> right = NULL;
                 delete q;
             }
-            //p -> right = NULL;
-            //delete q;
         }
     }
 }
@@ -130,7 +136,7 @@ void PreOrder(BST *p) {
 }
 
 int main() {
-    for (int i = 0; i < 12; i++) {
+    for (int i = 0; i < 3; i++) {
         insert();
     }
     int x, y;
@@ -146,10 +152,10 @@ int main() {
     }
     cout << endl;
     PreOrder(root);
-    //for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < 3; i++) {
         cout << "\nEnter a value to del: ";
         cin >> y;
         deletion(y);
         PreOrder(root);
-    //}
+    }
 }

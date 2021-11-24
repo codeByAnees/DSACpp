@@ -9,13 +9,13 @@ using std::string;
 
 struct emergency {
     string name;
-    string age;
     string address;
+    int age;
     int dis;
     emergency *forw = NULL;
 };
 
-emergency *head = NULL, *tail = NULL;
+emergency *head = NULL, *tail = NULL, *current = NULL;
 
 struct doctor {
     string Dname;
@@ -27,100 +27,118 @@ struct doctor {
 
 doctor *start = NULL, *end = NULL;
 
-void insertAtStart(doctor *p, emergency *curr) {
-    if (p -> patient == NULL) {
-        p -> patient = curr;
-    }
-    else {
-        curr -> forw = p -> patient;
-        p -> patient = curr;
-    }
-}
-
-void insertAtEnd(doctor *p, emergency *curr) {
-    if (p -> patient == NULL) {
-        curr -> forw = NULL;
-        p -> patient = curr;
-    }
-    else {
-        emergency *q = NULL;
-        q = p -> patient;
-        while (q -> forw != NULL) {
-            q = q -> forw;
-        }
-        q -> forw = curr;
-        curr -> forw = NULL;
-    }
-}
-
-void doubleEnded(doctor *p, emergency *curr) {
-    int choice;
-    cout << "Enter 1 to add at front \nEnter 2 to add at rear: ";
-    cin >> choice;
-    if (choice == 1) {
-        insertAtStart(p, curr);
-    }
-    else {
-        insertAtEnd(p, curr);
-    }
-}
-
-void circular(doctor *p, emergency *curr) {
-    if (p -> patient == NULL) {
-        curr -> forw = NULL;
-        p -> patient = curr;
-    }
-    else {
-        insertAtEnd(p, curr);
-    }
-}
-
-void priority(doctor *p, emergency *curr) {
-    emergency *a = NULL;
-    a = p -> patient;
-    if (a == NULL) {
-        curr -> forw = NULL;
-        p -> patient = curr;
-    }
-    else if (curr -> age == a -> age) {
-        curr -> forw = a -> forw;
-        a -> forw = curr;
-    }
-    else if (curr -> age > a -> age) {
-        curr -> forw = a;
-        p -> patient = curr;
-    }
-    else {
-        emergency *q = NULL;
-        while (a -> age > curr -> age && a != NULL) {
-            q = a;
-            a = a -> forw;
-        }
-        if (a -> age == curr -> age) {
-            curr -> forw = a -> forw;
-            a -> forw = curr;
-        }
-        else {
-            curr -> forw = a;
-            q -> forw = curr;
-        }
-    }
-}
-
-void refering(emergency *curr) {
+void doubleEnded() {
     doctor *p = NULL;
     p = start;
-    while (p -> Dtype != curr -> dis && p != NULL) {
+    while (p -> Dtype != 1 && p != NULL) {
         p = p -> next;
     }
-    if (p -> Dtype == 1) {
-        doubleEnded(p, curr);
+    if (p == NULL) {
+        cout << "Doctor not found!";
     }
-    else if (p -> Dtype == 2) {
-        circular(p, curr);
+    else {
+        int choice;
+        cout << "Enter 1 to add at front \nEnter 2 to add at rear: ";
+        cin >> choice;
+        if (p -> patient == NULL) {
+            current -> forw = NULL;
+            p -> patient = current;
+        }
+        else {
+            if (choice == 1) {
+                current -> forw = p -> patient;
+                p -> patient = current;
+            }
+            else {
+                emergency *q = NULL;
+                q = p -> patient;
+                while (q -> forw != NULL) {
+                    q = q -> forw;
+                }
+                q -> forw = current;
+                current -> forw = NULL;
+            }
+        }
     }
-    else if (p -> Dtype == 3) {
-        priority(p, curr);
+}
+
+void circular() {
+    doctor *p = NULL;
+    p = start;
+    while (p -> Dtype != 2 && p != NULL) {
+        p = p -> next;
+    }
+    if (p == NULL) {
+        cout << "Doctor not found!";
+    }
+    else {
+        if (p -> patient == NULL) {
+            current -> forw = NULL;
+            p -> patient = current;
+        }
+        else {
+            emergency *q = NULL;
+            q = p -> patient;
+            while (q -> forw != NULL) {
+                q = q -> forw;
+            }
+            q -> forw = current;
+            current -> forw = NULL;
+        }
+    }
+}
+
+void priority() {
+    doctor *p = NULL;
+    p = start;
+    while (p -> Dtype != 3 && p != NULL) {
+        p = p -> next;
+    }
+    if (p != NULL) {
+        emergency *a = NULL;
+        a = p -> patient;
+        if (a == NULL) {
+            current -> forw = NULL;
+            p -> patient = current;
+        }
+        else if (current -> age == a -> age) {
+            current -> forw = a -> forw;
+            a -> forw = current;
+        }
+        else if (current -> age > a -> age) {
+            current -> forw = a;
+            p -> patient = current;
+        }
+        else {
+            emergency *q = NULL;
+            while (a -> age > current -> age && a != NULL) {
+                q = a;
+                a = a -> forw;
+            }
+            if (a -> age == current -> age) {
+                current -> forw = a -> forw;
+                a -> forw = current;
+            }
+            else {
+                current -> forw = a;
+                q -> forw = current;
+            }
+        }
+    }
+    else {
+        cout << "No doctor found!";
+    }
+}
+
+void refering() {
+    if (current -> dis == 1) {
+        doubleEnded();
+    }
+    else if (current -> dis == 2) {
+        circular();
+    }
+    else if (current -> dis == 3) {
+        priority();
     }
     else {
         cout << "\nInvalid Input!\n";
@@ -128,7 +146,7 @@ void refering(emergency *curr) {
 }
 
 void enqueueP() {
-    emergency *current = NULL;
+    //emergency *current = NULL;
     current = new emergency;
     cout << "\nEnter patient name: ";
     cin >> current -> name;
@@ -148,7 +166,7 @@ void enqueueP() {
         tail -> forw = current;
         tail = current;
     }
-    refering(current);
+    refering();
 }
 
 void dequeing() {
