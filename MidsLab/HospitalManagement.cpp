@@ -160,7 +160,7 @@ void priority() {
     else cout << "\nDoctor not available!\n";
 }
 
-void refering() {
+void addPatient() {
     int choice;
     cout << "\nEnter 1 for ENT"
             "\nEnter 2 for Skin"
@@ -265,5 +265,65 @@ void dequeing() {
     else {
         cout << "\nInvalid choice\n";
     }
+}
+
+void display() {
+    doctor *p = head;
+    while (p != NULL) {
+        cout << "\n\t\tDoctor\n";
+        cout << "Name: " << p -> dName << endl;
+        cout << "Age: " << p -> dAge << endl;
+        switch (p -> dType) {
+        case 1:
+            cout << "Specialist in ENT" << endl;
+            break;
+        case 2:
+            cout << "Specialist in Skin" << endl;
+            break;
+        case 3:
+            cout << "Specialist in Cardic" << endl;
+            break;
+        }
+        emergency *q = p -> patient;
+        while (q != NULL) {
+            cout << "\n\tPatient\n";
+            cout << "Name: " << q -> name << endl;
+            cout << "Age: " << q -> age << endl;
+            q = q -> forw;
+        }
+        p = p -> next;
+    }
+}
+
+int main() {
+    int opt;
+    do {
+        cout << "\n\t\tHOSPITAL MANAGEMENT SYSTEM\n";
+        cout << "\nEnter 1 to add new Doctor \nEnter 2 to add a patient"
+                "\nEnter 3 to remove a patient"
+                "\nEnter 4 to display all details"
+                "\nEnter 0 to QUIT ---> ";
+        cin >> opt;
+        switch (opt) {
+        case 0:
+            break;
+        case 1:
+            addDoctor();
+            break;
+        case 2:
+            addPatient();
+            break;
+        case 3:
+            dequeing();
+            break;
+        case 4:
+            display();
+            break;
+        default:
+            cout << "\nYou selected invalid option!";
+            break;
+        }
+    } while (opt != 0);
+    return 0;
 }
 
