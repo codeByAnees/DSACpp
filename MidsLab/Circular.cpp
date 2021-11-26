@@ -71,11 +71,11 @@ void addPatient() {
             }
             a -> forw = cur;
         }
+        cout << "\nSuccessful\n";
     }
     else {
         cout << "\nInvalid choice\n";
     }
-    cout << "\nSuccessful\n";
 }
 
 void dequeing() {
@@ -103,9 +103,9 @@ void dequeing() {
                 delete a;
             }
         }
+        cout << "\nSuccessful\n";
     }
     else cout << "\nInvalid choice\n";
-    cout << "\nSuccessful\n";
 }
 
 void display() {
