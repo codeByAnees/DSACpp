@@ -11,6 +11,8 @@ struct emergency {
     emergency *forw = NULL;
 };
 
+emergency *start = NULL, *end = NULL;
+
 struct doctor {
     string dName;
     int dAge;
@@ -50,13 +52,8 @@ void doubleEnded() {
         p = p -> next;
     }
     if (p -> dType == choice) {
-        emergency *cur = new emergency;
-        cur -> dis = choice;
-        cout << "\n\t\tPatient\n";
-        cout << "Enter name: ";
-        cin >> cur -> name;
-        cout << "Enter age: ";
-        cin >> cur -> age;
+        emergency *cur = start;
+        cur -> forw = NULL;
         int opt;
         cout << "Enter 1 to add at front \nEnter 2 to add at rear: ";
         cin >> opt;
@@ -90,13 +87,8 @@ void circular() {
         p = p -> next;
     }
     if (p -> dType == choice) {
-        emergency *cur = new emergency;
-        cur -> dis = choice;
-        cout << "\n\t\tPatient\n";
-        cout << "Enter name: ";
-        cin >> cur -> name;
-        cout << "Enter age: ";
-        cin >> cur -> age;
+        emergency *cur = start;
+        cur -> forw = NULL;
         if (p -> patient == NULL) {
             p -> patient = cur;
         }
@@ -122,13 +114,8 @@ void priority() {
     }
     if (p -> dType == choice) {
         emergency *b = p -> patient;
-        emergency *cur = new emergency;
-        cur -> dis = choice;
-        cout << "\n\t\tPatient\n";
-        cout << "Enter name: ";
-        cin >> cur -> name;
-        cout << "Enter age: ";
-        cin >> cur -> age;
+        emergency *cur = start;
+        cur -> forw = NULL;
         if (p -> patient == NULL) {
             p -> patient = cur;
         }
@@ -160,12 +147,27 @@ void priority() {
     else cout << "\nDoctor not available!\n";
 }
 
+
 void addPatient() {
     int choice;
     cout << "\nEnter 1 for ENT"
             "\nEnter 2 for Skin"
             "\nEnter 3 for Cardic: ";
     cin >> choice;
+    emergency *cur = new emergency;
+    cur -> dis = choice;
+    cout << "\n\t\tPatient\n";
+    cout << "Enter name: ";
+    cin >> cur -> name;
+    cout << "Enter age: ";
+    cin >> cur -> age;
+    if (start == NULL) {
+        start = end = cur;
+    }
+    else {
+        cur -> forw = start;
+        start = cur;
+    }
     if (choice == 1) {
         doubleEnded();
     }
@@ -213,8 +215,8 @@ void dequeDoubleEnded() {
                     b -> forw = NULL;
                 }
             }
+            cout << "\nSuccessful\n";
         }
-        cout << "\nSuccessful\n";
     }
     else cout << "\nInvalid choice\n";
 }
@@ -227,7 +229,7 @@ void dequeue(int opt) {
     }
     if (p -> dType == choice) {
         if (p -> patient == NULL) {
-            cout << "\nNothing patient!\n";
+            cout << "\nNo patient!\n";
         }
         else {
             if (p -> patient -> forw == NULL) {
@@ -239,8 +241,8 @@ void dequeue(int opt) {
                 p -> patient = a -> forw;
                 delete a;
             }
+            cout << "\nSuccessful\n";
         }
-        cout << "\nSuccessful\n";
     }
     else cout << "\nInvalid choice\n";
 }
@@ -326,4 +328,3 @@ int main() {
     } while (opt != 0);
     return 0;
 }
-
