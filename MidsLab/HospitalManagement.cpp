@@ -122,11 +122,15 @@ void priority() {
     }
     else {
         emergency *q = NULL;
-        while (b -> age > cur -> age && b != NULL) {
+        while (b -> age > cur -> age) {
             q = b;
             b = b -> forw;
+            if (b == NULL) break;
         }
-        if (b -> age == cur -> age) {
+        if (b == NULL) {
+            q -> forw = cur;
+        }
+        else if (b -> age == cur -> age) {
             cur -> forw = b -> forw;
             b -> forw = cur;
         }
