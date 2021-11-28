@@ -6,6 +6,7 @@ using std::string;
 
 struct emergency {
     string name;
+    string address;
     int age;
     int dis;
     emergency *forw = NULL;
@@ -15,6 +16,7 @@ emergency *start = NULL, *end = NULL;
 
 struct doctor {
     string dName;
+    string dAddress;
     int dAge;
     int dType;
     doctor *next = NULL;
@@ -25,14 +27,16 @@ doctor *head = NULL, *tail = NULL, *current = NULL;
 
 void addDoctor() {
     current = new doctor;
-    cout << "\n\t\tDoctor\n";
-    cout << "Enter name: ";
+    cout << "\n\t\tEnter Doctor Details\n";
+    cout << "Enter name of doctor: ";
     cin >> current -> dName;
-    cout << "Enter age: ";
+    cout << "Enter age of doctor: ";
     cin >> current -> dAge;
-    cout << "\n\tDoctor specialization?"
-            "\nEnter 1 for ENT"
-            "\nEnter 2 for Skin"
+    cout << "Enter address of doctor: ";
+    cin >> current -> dAddress;
+    cout << "\nDoctor's specialization?"
+            "\nEnter 1 for Ear, nose and throat"
+            "\nEnter 2 for Skin or"
             "\nEnter 3 for Cardic: ";
     cin >> current -> dType;
     if (head == NULL) {
@@ -42,7 +46,7 @@ void addDoctor() {
         tail -> next = current;
         tail = current;
     }
-    cout << "\nSuccessful\n";
+    cout << "\nSuccessful!\n";
 }
 
 void doubleEnded() {
@@ -51,45 +55,17 @@ void doubleEnded() {
     while (p -> dType != choice && p != NULL) {
         p = p -> next;
     }
-    if (p -> dType == choice) {
-        emergency *cur = start;
-        cur -> forw = NULL;
-        int opt;
-        cout << "Enter 1 to add at front \nEnter 2 to add at rear: ";
-        cin >> opt;
-        if (p -> patient == NULL) {
-            p -> patient = cur;
-        }
-        else {
-            if (opt == 1) {
-                cur -> forw = p -> patient;
-                p -> patient = cur;
-            }
-            else {
-                emergency *a = p -> patient;
-                while (a -> forw != NULL) {
-                    a = a -> forw;
-                }
-                a -> forw = cur;
-            }
-        }
-        cout << "\nSuccessful\n";
+    emergency *cur = start;
+    cur -> forw = NULL;
+    int opt;
+    cout << "Enter 1 to add patient at front \nEnter 2 to add patient at rear: ";
+    cin >> opt;
+    if (p -> patient == NULL) {
+        p -> patient = cur;
     }
     else {
-        cout << "\nDoctor not available!\n";
-    }
-}
-
-void circular() {
-    int choice = 2;
-    doctor *p = head;
-    while (p -> dType != choice && p != NULL) {
-        p = p -> next;
-    }
-    if (p -> dType == choice) {
-        emergency *cur = start;
-        cur -> forw = NULL;
-        if (p -> patient == NULL) {
+        if (opt == 1) {
+            cur -> forw = p -> patient;
             p -> patient = cur;
         }
         else {
@@ -99,11 +75,29 @@ void circular() {
             }
             a -> forw = cur;
         }
-        cout << "\nSuccessful\n";
+    }
+    cout << "\nSuccessful!\n";
+}
+
+void circular() {
+    int choice = 2;
+    doctor *p = head;
+    while (p -> dType != choice && p != NULL) {
+        p = p -> next;
+    }
+    emergency *cur = start;
+    cur -> forw = NULL;
+    if (p -> patient == NULL) {
+        p -> patient = cur;
     }
     else {
-        cout << "\nDoctor not available!\n";
+        emergency *a = p -> patient;
+        while (a -> forw != NULL) {
+            a = a -> forw;
+        }
+        a -> forw = cur;
     }
+    cout << "\nSuccessful\n";
 }
 
 void priority() {
@@ -112,74 +106,85 @@ void priority() {
     while (p -> dType != choice && p != NULL) {
         p = p -> next;
     }
-    if (p -> dType == choice) {
-        emergency *b = p -> patient;
-        emergency *cur = start;
-        cur -> forw = NULL;
-        if (p -> patient == NULL) {
-            p -> patient = cur;
+    emergency *b = p -> patient;
+    emergency *cur = start;
+    cur -> forw = NULL;
+    if (p -> patient == NULL) {
+        p -> patient = cur;
+    }
+    else if (b -> age == cur -> age) {
+        cur -> forw = b -> forw;
+        b -> forw = cur;
+    }
+    else if (cur -> age > b -> age) {
+        cur -> forw = b;
+        p -> patient = cur;
+    }
+    else {
+        emergency *q = NULL;
+        while (b -> age > cur -> age && b != NULL) {
+            q = b;
+            b = b -> forw;
         }
-        else if (b -> age == cur -> age) {
+        if (b -> age == cur -> age) {
             cur -> forw = b -> forw;
             b -> forw = cur;
         }
-        else if (cur -> age > b -> age) {
-            cur -> forw = b;
-            p -> patient = cur;
-        }
         else {
-            emergency *q = NULL;
-            while (b -> age > cur -> age && b != NULL) {
-                q = b;
-                b = b -> forw;
-            }
-            if (b -> age == cur -> age) {
-                cur -> forw = b -> forw;
-                b -> forw = cur;
-            }
-            else {
-                cur -> forw = b;
-                q -> forw = cur;
-            }
+            cur -> forw = b;
+            q -> forw = cur;
         }
-        cout << "\nSuccessful\n";
     }
-    else cout << "\nDoctor not available!\n";
+    cout << "\nSuccessful!\n";
 }
 
 
 void addPatient() {
-    int choice;
-    cout << "\nEnter 1 for ENT"
-            "\nEnter 2 for Skin"
-            "\nEnter 3 for Cardic: ";
-    cin >> choice;
-    emergency *cur = new emergency;
-    cur -> dis = choice;
-    cout << "\n\t\tPatient\n";
-    cout << "Enter name: ";
-    cin >> cur -> name;
-    cout << "Enter age: ";
-    cin >> cur -> age;
-    if (start == NULL) {
-        start = end = cur;
+    if (head != NULL) {
+        int choice;
+        cout << "\nEnter 1 for Ear, nose or throat"
+                "\nEnter 2 for Skin problems"
+                "\nEnter 3 for Cardic issues: ";
+        cin >> choice;
+        doctor *a = head;
+        while (a -> dType != choice && a -> next != NULL) {
+            a = a -> next;
+        }
+        if (a -> dType == choice) {
+            emergency *cur = new emergency;
+            cur -> dis = choice;
+            cout << "\n\t\tEnter Patient Details\n";
+            cout << "Enter name of patient: ";
+            cin >> cur -> name;
+            cout << "Enter age of patient: ";
+            cin >> cur -> age;
+            cout << "Enter address of patient: ";
+            cin >> cur -> address;
+            if (start == NULL) {
+                start = end = cur;
+            }
+            else {
+                cur -> forw = start;
+                start = cur;
+            }
+            if (choice == 1) {
+                doubleEnded();
+            }
+            else if (choice == 2) {
+                circular();
+            }
+            else if (choice == 3) {
+                priority();
+            }
+            else {
+                cout << "\nInvalid choice!\n";
+            }
+        }
+        else {
+            cout << "\nSorry, Doctor for this disease is not available!\n";
+        }
     }
-    else {
-        cur -> forw = start;
-        start = cur;
-    }
-    if (choice == 1) {
-        doubleEnded();
-    }
-    else if (choice == 2) {
-        circular();
-    }
-    else if (choice == 3) {
-        priority();
-    }
-    else {
-        cout << "\nInvalid choice\n";
-    }
+    else cout << "\nNo doctor available!\n";
 }
 
 void dequeDoubleEnded() {
@@ -215,10 +220,10 @@ void dequeDoubleEnded() {
                     b -> forw = NULL;
                 }
             }
-            cout << "\nSuccessful\n";
+            cout << "\nSuccessful!\n";
         }
     }
-    else cout << "\nInvalid choice\n";
+    else cout << "\nInvalid choice!\n";
 }
 
 void dequeue(int opt) {
@@ -241,69 +246,92 @@ void dequeue(int opt) {
                 p -> patient = a -> forw;
                 delete a;
             }
-            cout << "\nSuccessful\n";
+            cout << "\nSuccessful!\n";
         }
     }
-    else cout << "\nInvalid choice\n";
+    else cout << "\nInvalid choice!\n";
 }
 
 void dequeing() {
-    int choice;
-    cout << "\nEnter 1 for ENT"
-            "\nEnter 2 for Skin"
-            "\nEnter 3 for Cardic: ";
-    cin >> choice;
-    if (choice == 1) {
-        dequeDoubleEnded();
-    }
-    else if (choice == 2 || choice == 3) {
-        if (choice == 2) {
-            dequeue(2);
+    if (head != NULL && start != NULL) {
+        int choice;
+        cout << "\nEnter 1 for Ear, nose or throat"
+                "\nEnter 2 for Skin problems"
+                "\nEnter 3 for Cardic issues: ";
+        cin >> choice;
+        if (choice == 1) {
+            dequeDoubleEnded();
+        }
+        else if (choice == 2 || choice == 3) {
+            if (choice == 2) {
+                dequeue(2);
+            }
+            else {
+                dequeue(3);
+            }
         }
         else {
-            dequeue(3);
+            cout << "\nInvalid choice!\n";
         }
     }
-    else {
-        cout << "\nInvalid choice\n";
-    }
+    else cout << "\nNo patient!\n";
 }
 
 void display() {
-    doctor *p = head;
-    while (p != NULL) {
-        cout << "\n\t\tDoctor\n";
-        cout << "Name: " << p -> dName << endl;
-        cout << "Age: " << p -> dAge << endl;
-        switch (p -> dType) {
-        case 1:
-            cout << "Specialist in ENT" << endl;
-            break;
-        case 2:
-            cout << "Specialist in Skin" << endl;
-            break;
-        case 3:
-            cout << "Specialist in Cardic" << endl;
-            break;
+    if (head != NULL) {
+        doctor *p = head;
+        while (p != NULL) {
+            cout << "\n\t\tDOCTOR\n";
+            cout << "Doctor name: " << p -> dName << endl;
+            cout << "Doctor age: " << p -> dAge << endl;
+            cout << "Doctor's address: " << p -> dAddress << endl;
+            switch (p -> dType) {
+            case 1:
+                cout << "Ear, nose and throat specialist." << endl;
+                break;
+            case 2:
+                cout << "Skin specialist." << endl;
+                break;
+            case 3:
+                cout << "Cardic specialist." << endl;
+                break;
+            }
+            emergency *q = p -> patient;
+            while (q != NULL) {
+                cout << "\n\tPATIENT\n";
+                cout << "Patient name: " << q -> name << endl;
+                cout << "Patient age: " << q -> age << endl;
+                cout << "Patient address: " << q -> address << endl;
+                q = q -> forw;
+            }
+            p = p -> next;
         }
-        emergency *q = p -> patient;
-        while (q != NULL) {
-            cout << "\n\tPatient\n";
-            cout << "Name: " << q -> name << endl;
-            cout << "Age: " << q -> age << endl;
-            q = q -> forw;
-        }
-        p = p -> next;
     }
+    else cout << "\nNothing to display!\n";
+}
+
+void displayPatients() {
+    if (start != NULL) {
+        emergency *a = start;
+        while (a != NULL) {
+            cout << "\n\t\tAll Patients\n";
+            cout << "Patient name: " << a -> name << endl;
+            cout << "Patient age: " << a -> age << endl;
+            cout << "Patient address: " << a -> age << endl;
+            a = a -> forw;
+        }
+    }
+    else cout << "\nNothing to display!\n";
 }
 
 int main() {
     int opt;
     do {
         cout << "\n\t\tHOSPITAL MANAGEMENT SYSTEM\n";
-        cout << "\nEnter 1 to add new Doctor \nEnter 2 to add a patient"
-                "\nEnter 3 to remove a patient"
+        cout << "\nEnter 1 to add a Doctor \nEnter 2 to add a Patient"
+                "\nEnter 3 to remove a Patient"
                 "\nEnter 4 to display all details"
+                "\nEnter 5 to display patients only"
                 "\nEnter 0 to QUIT ---> ";
         cin >> opt;
         switch (opt) {
@@ -320,6 +348,9 @@ int main() {
             break;
         case 4:
             display();
+            break;
+        case 5:
+            displayPatients();
             break;
         default:
             cout << "\nYou selected invalid option!";
