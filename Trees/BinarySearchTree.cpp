@@ -45,6 +45,7 @@ BST *search() {
         else {
             p = p -> left;
         }
+        if (p == NULL) break;
     }
     return p;
 }
