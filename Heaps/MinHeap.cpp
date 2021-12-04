@@ -8,6 +8,7 @@ class MinHeap {
     public:
     int *arr;
     int top;
+
     MinHeap() {
         arr = new int[8];
         top = -1;
@@ -21,7 +22,7 @@ class MinHeap {
     }
 
     void heap() {
-        int parent, left, right, smaller, i;
+        int parent, i;
         i = top;
         parent = (i - 1) / 2;
         while (arr[i] < arr[parent] && i >= 0 && parent >= 0) {
@@ -40,22 +41,22 @@ class MinHeap {
         }
         else {
             cout << "\nDeleted value is: " << arr[0] << endl;
-            int parent, left, right, smaller, i;
+            int parent, left, right, min, i;
             arr[0] = arr[top];
             top--;
             i = 0;
             parent = (i - 1) / 2;
             left = (2 * i) + 1;
             right = (2 * i) + 2;
-            smaller = (arr[left] < arr[right])? left : right;
-            while (arr[smaller] < arr[parent] && smaller >= 0 && parent >= 0) {
+            min = (arr[left] < arr[right])? left : right;
+            while (arr[min] < arr[parent] && min >= 0 && parent >= 0) {
                 int temp = arr[parent];
-                arr[parent] = arr[smaller];
-                arr[smaller] = temp;
-                parent = smaller;
+                arr[parent] = arr[min];
+                arr[min] = temp;
+                parent = min;
                 left = (2 * parent) + 1;
                 right = (2 * parent) + 2;
-                smaller = (arr[left] < arr[right])? left : right;
+                min = (arr[left] < arr[right])? left : right;
             }
         }
     }
@@ -85,7 +86,6 @@ int main() {
                 break;
             case 2:
                 m.deletion();
-                m.heap();
                 break;
             case 3:
                 m.display();
