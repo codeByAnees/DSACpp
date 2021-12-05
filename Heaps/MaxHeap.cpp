@@ -34,11 +34,11 @@ class MaxHeap {
     }
 
     void deletion() {
-        // if (top <= 2) {
-        //    cout << "\nDeleted value is: " << arr[0] << endl;
-        //    top--; 
-        // }
-        // else {
+        if (top <= 2) {
+           cout << "\nDeleted value is: " << arr[0] << endl;
+           top--; 
+        }
+        else {
             cout << "\nDeleted value is: " << arr[0] << endl;
             int parent, left, right, max, i, temp;
             arr[0] = arr[top];
@@ -57,7 +57,7 @@ class MaxHeap {
                 right = (2 * parent) + 2;
                 max = (arr[left] > arr[right])? left : right;
             }
-        //}
+        }
     }
 
     void display() {
