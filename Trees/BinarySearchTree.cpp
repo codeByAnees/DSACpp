@@ -38,7 +38,7 @@ BST *search() {
     cout << "\nEnter a value to search: ";
     cin >> x;
     BST *p = root;
-    while (p -> id != x && p != NULL) {
+    while (p -> id != x) {
         if (x > p -> id) {
             p = p -> right;
         }
