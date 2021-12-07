@@ -5,13 +5,16 @@ using std::endl;
 
 int main() {
     int *arr;
-    arr = new int[2];
+    arr = new int[3];
     arr[0] = 1;
-    arr[1] = 2;
-    int max = arr[0] > arr[1]? 0 : 1;
-    int a, b, c;
-    a = (1) / 2;
-    // b = 9 / 3;
-    // c = (a < b)? a : b;
-    cout << a;
+    arr[1] = 15;
+    arr[2] = 7;
+    int size = sizeof(arr) / sizeof(arr[0]);
+    int largest = arr[0];
+    for (int i = 1; i < size; i++) {
+        if (arr[i] > largest) {
+            largest = arr[i];
+        }
+    }
+    cout << largest;
 }
