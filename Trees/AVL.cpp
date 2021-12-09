@@ -7,7 +7,6 @@ using std::endl;
 
 struct BST {
     int id;
-    int bf = 0;
     BST *right = NULL, *left = NULL;
 };
 
@@ -73,6 +72,28 @@ BST *root = NULL, *current = NULL;
 //     cout << "Right: " << rightH << endl;
 //     cout << "Balencing: " << q -> bf << endl;
 // }
+// void insert() {
+//     current = new BST;
+//     cout << "\nEnter a value: ";
+//     cin >> current -> id;
+//     if (root == NULL) {
+//         root = current;
+//     }
+//     else {
+//         BST *p = root, *k = NULL;
+//         while (p != NULL) {
+//             k = p;
+//             if (current -> id > p -> id) {
+//                 p = p -> right;
+//             }
+//             else p = p -> left;
+//         }
+//         if (current -> id > k -> id) {
+//             k -> right = current;
+//         }
+//         else k -> left = current;
+//     }
+// }
 
 int height(BST *p) {
     if (p == NULL) {
@@ -80,7 +101,7 @@ int height(BST *p) {
     }
     int Lheight = height(p -> left);
     int Rheight = height(p -> right);
-    return max(Lheight, Rheight) + 1;
+    return (max(Lheight, Rheight) + 1);
 }
 
 int getBalenceFactor(BST *p) {
@@ -92,27 +113,59 @@ int getBalenceFactor(BST *p) {
     }
 }
 
-void insert() {
+BST *rightRotate(BST *p) {
+    BST *q = p -> left;
+    BST *k = q -> right;
+
+    q -> right = p;
+    p -> left = k;
+    return q;
+}
+
+BST *leftRotate(BST *q) {
+    BST *p = q -> right;
+    BST *s = p -> left;
+
+    p -> left = q;
+    q -> right = s;
+    return p;
+}
+
+BST *insert(BST *r, BST *current) {
+    if (r == NULL) {
+        r = current;
+        return r;
+    }
+    else if (current -> id < r -> id) {
+        r -> left = insert(r -> left, current);
+    }
+    else if (current -> id > r -> id) {
+        r -> right = insert(r -> right, current);
+    }
+
+    int bf = getBalenceFactor(r);
+    if (bf > 1 && current -> id < r -> left -> id) {
+        return rightRotate(r);
+    }
+    else if (bf < -1 && current -> id > r -> right -> id) {
+        return leftRotate(r);
+    }
+    else if (bf > 1 && current -> id > r -> left -> id) {
+        r -> left = leftRotate(r -> left);
+        return rightRotate(r);
+    }
+    else if (bf < -1 && current -> id < r -> right -> id) {
+        r -> right = rightRotate(r -> right);
+        return leftRotate(r);
+    }
+    return r;
+}
+
+void insertion() {
     current = new BST;
     cout << "\nEnter a value: ";
     cin >> current -> id;
-    if (root == NULL) {
-        root = current;
-    }
-    else {
-        BST *p = root, *k = NULL;
-        while (p != NULL) {
-            k = p;
-            if (current -> id > p -> id) {
-                p = p -> right;
-            }
-            else p = p -> left;
-        }
-        if (current -> id > k -> id) {
-            k -> right = current;
-        }
-        else k -> left = current;
-    }
+    root = insert(root, current);
 }
 
 void PreOrder(BST *p) {
@@ -134,14 +187,14 @@ int main() {
             case 0:
                 break;
             case 1:
-                insert();
+                insertion();
                 cout << "\nSuccessful!\n";
                 break;
             case 2:
                 PreOrder(root);
                 break;
             case 3:
-                cout << "BF of Root: " << getBalenceFactor(root -> left) << endl;
+                cout << "BF of Root: " << getBalenceFactor(root) << endl;
                 break;
         }
     } while(x != 0);
