@@ -83,6 +83,15 @@ int height(BST *p) {
     return max(Lheight, Rheight) + 1;
 }
 
+int getBalenceFactor(BST *p) {
+    if (p == NULL) {
+        return -1;
+    }
+    else {
+        return (height(p -> left) - height(p -> right));
+    }
+}
+
 void insert() {
     current = new BST;
     cout << "\nEnter a value: ";
@@ -132,7 +141,7 @@ int main() {
                 PreOrder(root);
                 break;
             case 3:
-                cout << "Height: " << height(root);
+                cout << "BF of Root: " << getBalenceFactor(root -> left) << endl;
                 break;
         }
     } while(x != 0);
