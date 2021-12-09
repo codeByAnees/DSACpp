@@ -161,6 +161,7 @@ BST *insert(BST *r, BST *current) {
     return r;
 }
 
+
 void insertion() {
     current = new BST;
     cout << "\nEnter a value: ";
@@ -176,11 +177,108 @@ void PreOrder(BST *p) {
     }
 }
 
+
+BST *balencing(BST *r) {
+    int bf = getBalenceFactor(r);
+    if (bf == 2 && (getBalenceFactor(r -> left) >= 0)) {
+        return rightRotate(r);
+    }
+    else if (bf == -2 && (getBalenceFactor(r -> right) <= 0)) {
+        return leftRotate(r);
+    }
+    else if (bf == 2 && (getBalenceFactor(r -> left) == -1)) {
+        r -> left = leftRotate(r -> left);
+        return rightRotate(r);
+    }
+    else if (bf == -2 && (getBalenceFactor(r -> right) == 1)) {
+        r -> right = rightRotate(r -> right);
+        return leftRotate(r);
+    }
+    return r;
+}
+
+
+void deletion(int x) {
+    BST *p = root, *k = NULL;
+    while (p -> id != x && p != NULL) {
+        k = p;
+        if (x > p -> id) {
+            p = p -> right;
+        }
+        else p = p -> left;
+    }
+    if (p -> right == NULL && p -> left == NULL) {
+        if (k -> right == p) {
+            delete p;
+            k -> right = NULL;
+        }
+        else {
+            delete p;
+            k -> left = NULL;
+        }
+    }
+    else if (p -> right == NULL || p -> left == NULL) {
+        if (p -> left == NULL) {
+            if (k -> right == p && p -> right != NULL) {
+                k -> right = p -> right;
+                delete p;
+            }
+            else if (k -> left == p && p -> right != NULL) {
+                k -> left = p -> right;
+                delete p;
+            }
+        }
+        else {
+            if (k -> left == p && p -> left != NULL) {
+                k -> left = p -> left;
+                delete p;
+            }
+            else if (k -> right == p && p -> left != NULL) {
+                k -> right = p -> left;
+                delete p;
+            }
+        }
+    }
+    else {
+        BST *q = p -> right, *d = NULL;
+        while (q -> left != NULL) {
+            d = q;
+            q = q -> left;
+        }
+        p -> id = q -> id;
+        if (q -> left == NULL) {
+            if (q -> right == NULL) {
+                p -> right = NULL;
+                delete q;
+            }
+            else {
+                p -> right = q -> right;
+                delete q;
+            }
+        }
+        else if (q -> right != NULL) {
+            d -> left = q -> right;
+            delete q;
+        }
+        else {
+            if (p -> right != NULL) {
+                d -> left = NULL;
+                delete q;
+            }
+            else {
+                p -> right = NULL;
+                delete q;
+            }
+        }
+    }
+    root = balencing(root);
+}
+
 int main() {
     int x;
     do {
-        cout << "\n\t\tA V L\n";
-        cout << "\nEnter 1 to insert \nEnter 2 to display \nEnter 3 for height "
+        cout << "\n\t\t\tA V L - T R E E\n";
+        cout << "\nEnter 1 to insert \nEnter 2 to delete \nEnter 3 to display "
                 "\nEnter 0 to QUIT--> ";
         cin >> x;
         switch (x) {
@@ -191,10 +289,17 @@ int main() {
                 cout << "\nSuccessful!\n";
                 break;
             case 2:
+                int z;
+                cout << endl;
                 PreOrder(root);
+                cout << endl;
+                cout << "\nEnter a value to delete: ";
+                cin >> z;
+                deletion(z);
+                cout << "\nSuccessful!\n";
                 break;
             case 3:
-                cout << "BF of Root: " << getBalenceFactor(root) << endl;
+                PreOrder(root);
                 break;
         }
     } while(x != 0);
