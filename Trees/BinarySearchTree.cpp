@@ -102,19 +102,25 @@ void deletion(int x) {
                 q = q -> left;
             }
             p -> id = q -> id;
-            if (q -> left == NULL) {
-                if (q -> right == NULL) {
+            if (q -> right == NULL) {
+                if (d != NULL) {
+                    delete q;
+                    d -> left = NULL;
+                }
+                else {
                     p -> right = NULL;
+                    delete q;
+                }
+            }
+            else if (q -> right != NULL) {
+                if (d != NULL) {
+                    d -> left = q -> right;
                     delete q;
                 }
                 else {
                     p -> right = q -> right;
                     delete q;
                 }
-            }
-            else if (q -> right != NULL) {
-                d -> left = q -> right;
-                delete q;
             }
             else {
                 if (p -> right != NULL) {

@@ -250,19 +250,25 @@ void deletion(int x) {
                 q = q -> left;
             }
             p -> id = q -> id;
-            if (q -> left == NULL) {
-                if (q -> right == NULL) {
+            if (q -> right == NULL) {
+                if (d != NULL) {
+                    delete q;
+                    d -> left = NULL;
+                }
+                else {
                     p -> right = NULL;
+                    delete q;
+                }
+            }
+            else if (q -> right != NULL) {
+                if (d != NULL) {
+                    d -> left = q -> right;
                     delete q;
                 }
                 else {
                     p -> right = q -> right;
                     delete q;
                 }
-            }
-            else if (q -> right != NULL) {
-                d -> left = q -> right;
-                delete q;
             }
             else {
                 if (p -> right != NULL) {
@@ -276,6 +282,8 @@ void deletion(int x) {
             }
         }
         root = balencing(root);
+        root -> left = balencing(root -> left);
+        root -> right = balencing(root -> right);
         cout << "\nSuccessful!\n";
     }
     else cout << "\nValue not found!\n";
@@ -303,7 +311,6 @@ int main() {
                 cout << "\nEnter a value to delete: ";
                 cin >> z;
                 deletion(z);
-                cout << "\nSuccessful!\n";
                 break;
             case 3:
                 PreOrder(root);
