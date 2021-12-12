@@ -20,4 +20,6 @@ int main() {
     }
     cout << arr[2][0] << endl;
     cout << arr[0][1] << endl;
+
+    
 }
