@@ -25,7 +25,7 @@ void dijkstra(int graph[][5], int n) {
         }
     }
     cout << "Vertex     Distance from source" << endl;
-    for (int i = 0; i < n; i++) {
+    for (int i = 1; i < n; i++) {
         cout << i << "              " << distance[i] << endl;
     }
 }
