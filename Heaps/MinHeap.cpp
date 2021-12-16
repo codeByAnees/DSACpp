@@ -3,14 +3,15 @@
 using std::cin;
 using std::cout;
 using std::endl;
+using namespace std;
 
 class MinHeap {
     public:
-    int *arr;
+    int *heap;
     int top;
 
     MinHeap() {
-        arr = new int[8];
+        heap = new int[8];
         top = -1;
     }
 
@@ -18,17 +19,15 @@ class MinHeap {
         int val;
         cout << "Enter a value: ";
         cin >> val;
-        arr[++top] = val;
+        heap[++top] = val;
     }
 
-    void heap() {
+    void heapp() {
         int parent, i;
         i = top;
         parent = (i - 1) / 2;
-        while (arr[i] < arr[parent] && i >= 0 && parent >= 0) {
-            int temp = arr[parent];
-            arr[parent] = arr[i];
-            arr[i] = temp;
+        while (heap[i] < heap[parent]) {
+            swap(heap[i], heap[parent]);
             i = parent;
             parent = (i - 1) / 2;
         }
@@ -36,27 +35,25 @@ class MinHeap {
 
     void deletion() {
         if (top <= 2) {
-           cout << "\nDeleted value is: " << arr[0] << endl;
+           cout << "\nDeleted value is: " << heap[0] << endl;
            top--; 
         }
         else {
-            cout << "\nDeleted value is: " << arr[0] << endl;
+            cout << "\nDeleted value is: " << heap[0] << endl;
             int parent, left, right, min, i;
-            arr[0] = arr[top];
+            heap[0] = heap[top];
             top--;
             i = 0;
             parent = (i - 1) / 2;
             left = (2 * i) + 1;
             right = (2 * i) + 2;
-            min = (arr[left] < arr[right])? left : right;
-            while (arr[min] < arr[parent] && min >= 0 && parent >= 0) {
-                int temp = arr[parent];
-                arr[parent] = arr[min];
-                arr[min] = temp;
+            min = (heap[left] < heap[right])? left : right;
+            while (heap[min] < heap[parent]) {
+                swap(heap[min], heap[parent]);
                 parent = min;
                 left = (2 * parent) + 1;
                 right = (2 * parent) + 2;
-                min = (arr[left] < arr[right])? left : right;
+                min = (heap[left] < heap[right])? left : right;
             }
         }
     }
@@ -64,7 +61,7 @@ class MinHeap {
     void display() {
         cout << endl;
         for (int i = 0; i <= top; i++) {
-            cout << arr[i] << " ";
+            cout << heap[i] << " ";
         }
         cout << endl;
     }
@@ -82,7 +79,7 @@ int main() {
                 break;
             case 1:
                 m.insert();
-                m.heap();
+                m.heapp();
                 break;
             case 2:
                 m.deletion();

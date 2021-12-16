@@ -25,9 +25,7 @@ class MaxHeap {
         i = top;
         parent = (i - 1) / 2;
         while (heap[i] > heap[parent] && i >= 0 && parent >= 0) {
-            int temp = heap[parent];
-            heap[parent] = heap[i];
-            heap[i] = temp;
+            swap(heap[i], heap[parent]);
             i = parent;
             parent = (i - 1) / 2;
         }
@@ -49,9 +47,7 @@ class MaxHeap {
             right = (2 * i) + 2;
             max = (heap[left] > heap[right])? left : right;
             while (heap[max] > heap[parent]) {
-                int temp = heap[parent];
-                heap[parent] = heap[max];
-                heap[max] = temp;
+                swap(heap[max], heap[parent]);
                 parent = max;
                 left = (2 * parent) + 1;
                 right = (2 * parent) + 2;
