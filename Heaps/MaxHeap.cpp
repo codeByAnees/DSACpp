@@ -6,10 +6,10 @@ using std::endl;
 
 class MaxHeap {
     public:
-    int *arr;
+    int *heap;
     int top;
     MaxHeap() {
-        arr = new int[8];
+        heap = new int[8];
         top = -1;
     }
 
@@ -17,17 +17,17 @@ class MaxHeap {
         int val;
         cout << "Enter a value: ";
         cin >> val;
-        arr[++top] = val;
+        heap[++top] = val;
     }
 
     void heap() {
         int parent, i;
         i = top;
         parent = (i - 1) / 2;
-        while (arr[i] > arr[parent] && i >= 0 && parent >= 0) {
-            int temp = arr[parent];
-            arr[parent] = arr[i];
-            arr[i] = temp;
+        while (heap[i] > heap[parent] && i >= 0 && parent >= 0) {
+            int temp = heap[parent];
+            heap[parent] = heap[i];
+            heap[i] = temp;
             i = parent;
             parent = (i - 1) / 2;
         }
@@ -35,27 +35,27 @@ class MaxHeap {
 
     void deletion() {
         if (top <= 2) {
-           cout << "\nDeleted value is: " << arr[0] << endl;
+           cout << "\nDeleted value is: " << heap[0] << endl;
            top--; 
         }
         else {
-            cout << "\nDeleted value is: " << arr[0] << endl;
+            cout << "\nDeleted value is: " << heap[0] << endl;
             int parent, left, right, max, i, temp;
-            arr[0] = arr[top];
+            heap[0] = heap[top];
             top--;
             i = 0;
             parent = (i - 1) / 2;
             left = (2 * i) + 1;
             right = (2 * i) + 2;
-            max = (arr[left] > arr[right])? left : right;
-            while (arr[max] > arr[parent]) {
-                int temp = arr[parent];
-                arr[parent] = arr[max];
-                arr[max] = temp;
+            max = (heap[left] > heap[right])? left : right;
+            while (heap[max] > heap[parent]) {
+                int temp = heap[parent];
+                heap[parent] = heap[max];
+                heap[max] = temp;
                 parent = max;
                 left = (2 * parent) + 1;
                 right = (2 * parent) + 2;
-                max = (arr[left] > arr[right])? left : right;
+                max = (heap[left] > heap[right])? left : right;
             }
         }
     }
@@ -63,7 +63,7 @@ class MaxHeap {
     void display() {
         cout << endl;
         for (int i = 0; i <= top; i++) {
-            cout << arr[i] << " ";
+            cout << heap[i] << " ";
         }
         cout << endl;
     }
