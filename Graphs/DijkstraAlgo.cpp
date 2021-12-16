@@ -33,10 +33,9 @@ void dijkstra(int **graph, int n) {
 int main() {
     int rows, col;
     cout << "\n\t\tD I J K S T R A\n";
-    cout << "\nEnter number of rows: ";
+    cout << "\nEnter number of vertices: ";
     cin >> rows;
-    cout << "Enter number of col: ";
-    cin >> col;
+    col = rows;
     int **graph = new int*[rows];
     for (int i = 0; i < rows; i++) {
         graph[i] = new int[col];
@@ -47,7 +46,7 @@ int main() {
             cin >> graph[i][j];
         }
     }
-    // int arr[5][5] = {
+    // int graph[5][5] = {
     //                 {0, 5, 0, 10, 15},
     //                 {0, 0, 1, 4, 0},
     //                 {0, 0, 0, 2, 0},
@@ -55,7 +54,7 @@ int main() {
     //                 {0, 0, 8, 0, 0}
     //                 };
 
-    // int arr[5][5] = {
+    // int graph[5][5] = {
     //                 {0, 10, 3, 0 , 0},
     //                 {0, 0, 1, 2, 0},
     //                 {0, 4, 0, 8, 2},

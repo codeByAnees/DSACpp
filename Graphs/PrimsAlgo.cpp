@@ -38,10 +38,9 @@ void prims(int **graph, int n) {
 int main() {
     int rows, col;
     cout << "\n\t\tP R I M S\n";
-    cout << "\nEnter number of rows: ";
+    cout << "\nEnter number of vertices: ";
     cin >> rows;
-    cout << "Enter number of col: ";
-    cin >> col;
+    col = rows;
     int **graph = new int*[rows];
     for (int i = 0; i < rows; i++) {
         graph[i] = new int[col];
@@ -52,7 +51,7 @@ int main() {
             cin >> graph[i][j];
         }
     }
-    // int arr[8][8] = {
+    // int graph[8][8] = {
     //     {0,0,3,0,25,18,2,0},
     //     {0,0,0,2,7,0,0,3},
     //     {0,4,0,3,0,3,0,0},
@@ -62,7 +61,7 @@ int main() {
     //     {0,8,0,0,0,10,0,4},
     //     {8,0,4,0,10,7,0,9}
     // };
-    // int arr[6][6] = {
+    // int graph[6][6] = {
     //     {0,16,0,0,19,21},
     //     {16,0,6,5,0,11},
     //     {0,6,0,10,0,0},

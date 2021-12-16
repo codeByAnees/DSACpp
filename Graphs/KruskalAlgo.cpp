@@ -4,9 +4,11 @@
 #include <deque>
 using namespace std;
 
+int n;
+
 bool vertixChecker(int i, int *vertices) {
     bool val = false;
-    for (int j = 0; j < 7; j++) {
+    for (int j = 0; j < n; j++) {
         if (vertices[j] == i) {
             val = true;
         }
@@ -16,7 +18,7 @@ bool vertixChecker(int i, int *vertices) {
 
 bool edgeChecker(int i, int *edge) {
     bool val = false;
-    for (int j = 0; j < 7; j++) {
+    for (int j = 0; j < n; j++) {
         if (edge[j] == i) {
             val = true;
         }
@@ -24,7 +26,7 @@ bool edgeChecker(int i, int *edge) {
     return val;
 }
 
-void kruskal(int graph[][8], int n) {
+void kruskal(int graph[][8]) {
     int size = n * n;
     int distance[size];
     int parent[size];
@@ -94,10 +96,9 @@ void kruskal(int graph[][8], int n) {
 int main() {
     // int rows, col;
     // cout << "\n\t\tK R U S K A L\n";
-    // cout << "\nEnter number of rows: ";
+    // cout << "\nEnter number of vertices: ";
     // cin >> rows;
-    // cout << "Enter number of col: ";
-    // cin >> col;
+    // col = rows;
     // int **graph = new int*[rows];
     // for (int i = 0; i < rows; i++) {
     //     graph[i] = new int[col];
@@ -108,6 +109,7 @@ int main() {
     //         cin >> graph[i][j];
     //     }
     // }
+    n = 8;
     int graph[8][8] = {
         {0,8,0,0,0,10,0,5},
         {8,0,4,0,4,4,0,4},
@@ -118,5 +120,5 @@ int main() {
         {0,0,0,2,3,0,0,3},
         {5,4,0,0,0,0,3,0}
     };
-    kruskal(graph, 8);
+    kruskal(graph);
 }
