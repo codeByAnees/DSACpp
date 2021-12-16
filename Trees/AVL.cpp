@@ -22,7 +22,7 @@ int height(BST *p) {
     return (max(Lheight, Rheight) + 1);
 }
 
-int getBalenceFactor(BST *p) {
+int getBF(BST *p) {
     if (p == NULL) {
         return -1;
     }
@@ -61,7 +61,7 @@ BST *insert(BST *r, BST *current) {
         r -> right = insert(r -> right, current);
     }
 
-    int bf = getBalenceFactor(r);
+    int bf = getBF(r);
     if (bf > 1 && current -> id < r -> left -> id) {
         return rightRotate(r);
     }
@@ -96,19 +96,19 @@ void PreOrder(BST *p) {
 }
 
 
-BST *balencing(BST *r) {
-    int bf = getBalenceFactor(r);
-    if (bf == 2 && (getBalenceFactor(r -> left) >= 0)) {
+BST *balencingTree(BST *r) {
+    int bf = getBF(r);
+    if (bf == 2 && (getBF(r -> left) >= 0)) {
         return rightRotate(r);
     }
-    else if (bf == -2 && (getBalenceFactor(r -> right) <= 0)) {
+    else if (bf == -2 && (getBF(r -> right) <= 0)) {
         return leftRotate(r);
     }
-    else if (bf == 2 && (getBalenceFactor(r -> left) == -1)) {
+    else if (bf == 2 && (getBF(r -> left) == -1)) {
         r -> left = leftRotate(r -> left);
         return rightRotate(r);
     }
-    else if (bf == -2 && (getBalenceFactor(r -> right) == 1)) {
+    else if (bf == -2 && (getBF(r -> right) == 1)) {
         r -> right = rightRotate(r -> right);
         return leftRotate(r);
     }
@@ -199,9 +199,9 @@ void deletion(int x) {
                 }
             }
         }
-        root = balencing(root);
-        root -> left = balencing(root -> left);
-        root -> right = balencing(root -> right);
+        root = balencingTree(root);
+        root -> left = balencingTree(root -> left);
+        root -> right = balencingTree(root -> right);
         cout << "\nSuccessful!\n";
     }
     else cout << "\nValue not found!\n";
