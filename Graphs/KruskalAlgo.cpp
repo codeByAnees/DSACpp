@@ -4,19 +4,7 @@
 #include <deque>
 using namespace std;
 
-// int min(int distance[]) {
-//     int min = 0;
-//     for (int i = 1; i < distance.length(); i++) {
-//         if (distance[min] < distance[i]) {
-//             if (!visited[i]) {
-//                 min = i;
-//             }
-//         }
-//     }
-//     return min;
-// }
-
-bool checker(int i, int *vertices) {
+bool vertixChecker(int i, int *vertices) {
     bool val = false;
     for (int j = 0; j < 7; j++) {
         if (vertices[j] == i) {
@@ -26,7 +14,7 @@ bool checker(int i, int *vertices) {
     return val;
 }
 
-bool checker2(int i, int *edge) {
+bool edgeChecker(int i, int *edge) {
     bool val = false;
     for (int j = 0; j < 7; j++) {
         if (edge[j] == i) {
@@ -37,70 +25,90 @@ bool checker2(int i, int *edge) {
 }
 
 void kruskal(int graph[][8], int n) {
-    int distance[n * n];
-    int parent[n * n];
-    int connect[n * n];
-    bool visited[n * n];
+    int size = n * n;
+    int distance[size];
+    int parent[size];
+    int connect[size];
+    bool visited[size];
 
-    int vertices[n - 1];
-    int edge[n - 1];
-    int dist[n - 1];
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < size; i++) {
         distance[i] = INT_MAX;
         parent[i] = INT_MAX;
         connect[i] = INT_MAX;
         visited[i] = false;
     }
+
     int count = -1;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            if (graph[i][j] != 0) {
-                distance[++count] = graph[i][j];
-                parent[++count] = i;
-                connect[++count] = j;
+            if (graph[i][j] != 0 && graph[i][j] != INT_MAX) {
+                count++;
+                distance[count] = graph[i][j];
+                parent[count] = i;
+                connect[count] = j;
             }
-        }
-    }    
-    int num = 1;
-    while (num <= n - 1) {
-        int min = 0;
-        for (int i = 1; i < distance.length(); i++) {
-            if (distance[min] < distance[i]) {
-                if (!visited[i]) {
-                    min = i;
-                }
-            }
-        }
-        int smallest = min;
-        visited[smallest] = true;
-        int aParent = parent[smallest];
-        int bEdge = connect[smallest];
-        int distan = distance[smallest];
-        if ((checker(bEdge, vertices) == true && checker2(aParent, edge) == true) && (graph[aParent][bEdge] == graph[bEdge][aParent])) {
-            continue;
-        }
-        else if (checker2(aParent, edge) == true && checker2(bEdge, edge) == true) {
-            continue;
-        }
-        else if (checker(aParent, vertices) == true && checker2(bEdge, edge) == true) {
-            continue;
-        }
-        else {
-            vertices[num] = aParent;
-            edge[num] = bEdge;
-            dist[num] = distan;
-            num++;
         }
     }
 
+    int vertices[n];
+    int edge[n];
+    int dist[n];
+
+    int num = 1;
+    while (num <= n - 1) {
+        int smallest = 0;
+        for (int i = 1; i < count; i++) {
+            if (distance[i] < distance[smallest]) {
+                if (!visited[i]) {
+                    smallest = i;
+                }
+            }
+        }
+        visited[smallest] = true;
+        int vertix = parent[smallest];
+        int Edge = connect[smallest];
+        int dis = distance[smallest];
+        if ((vertixChecker(Edge, vertices) && edgeChecker(vertix, edge)) && (graph[vertix][Edge] == graph[Edge][vertix])) {
+            continue;
+        }
+        else if (edgeChecker(vertix, edge) && edgeChecker(Edge, edge)) {
+            continue;
+        }
+        else if (vertixChecker(vertix, vertices) && edgeChecker(Edge, edge)) {
+            continue;
+        }
+        else {
+            vertices[num] = vertix;
+            edge[num] = Edge;
+            dist[num] = dis;
+        }
+        num++;
+    }
+
     cout<<"Edges \tWeight\n";
-    for (int i = 0; i < n - 1; i++) {
+    for (int i = 1; i < n; i++) {
         cout << vertices[i] << " - " << edge[i] << " \t" << dist[i] << endl;
     }
 }
 
 int main() {
-    int arr[8][8] = {
+    // int rows, col;
+    // cout << "\n\t\tK R U S K A L\n";
+    // cout << "\nEnter number of rows: ";
+    // cin >> rows;
+    // cout << "Enter number of col: ";
+    // cin >> col;
+    // int **graph = new int*[rows];
+    // for (int i = 0; i < rows; i++) {
+    //     graph[i] = new int[col];
+    // }
+    // for (int i = 0; i < rows; i++) {
+    //     for (int j = 0; j < col; j++) {
+    //         cout << "Enter distance: ";
+    //         cin >> graph[i][j];
+    //     }
+    // }
+    int graph[8][8] = {
         {0,8,0,0,0,10,0,5},
         {8,0,4,0,4,4,0,4},
         {0,4,0,3,0,3,0,0},
@@ -110,5 +118,5 @@ int main() {
         {0,0,0,2,3,0,0,3},
         {5,4,0,0,0,0,3,0}
     };
-    kruskal(arr, 8);
+    kruskal(graph, 8);
 }

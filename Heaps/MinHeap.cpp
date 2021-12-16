@@ -1,8 +1,5 @@
 #include<iostream>
 #include <cmath>
-using std::cin;
-using std::cout;
-using std::endl;
 using namespace std;
 
 class MinHeap {
@@ -20,9 +17,10 @@ class MinHeap {
         cout << "Enter a value: ";
         cin >> val;
         heap[++top] = val;
+        heaps();
     }
 
-    void heapp() {
+    void heaps() {
         int parent, i;
         i = top;
         parent = (i - 1) / 2;
@@ -79,7 +77,6 @@ int main() {
                 break;
             case 1:
                 m.insert();
-                m.heapp();
                 break;
             case 2:
                 m.deletion();
