@@ -6,8 +6,8 @@ using std::endl;
 using std::vector;
 using std::string;
 
-int ID = 0;
-string pass = "1234"; 
+int adminID = 0;
+string adminPass = "1234"; 
 
 struct adminLogIn {
     int id;
@@ -21,7 +21,7 @@ bool adminLogin() {
     cin >> add -> id;
     cout << "Enter password: ";
     cin >> add -> password;
-    if (add -> id == ID && add -> password == pass) {
+    if (add -> id == adminID && add -> password == adminPass) {
         return true;
     }
     else return false;
@@ -76,17 +76,29 @@ void display() {
 //*******************************************************************************************//
 
 struct riderLogin {
-    string
+    string Logid;
+    string Logpassw;
+    riderLogin *rNext = NULL;
 };
 
-struct rider {
-    int id;
-    string name;
-    string bikeRegNo;
-    int totalOrders;
-    rider *next = NULL;
-    rideRecord *record = NULL;
-};
+riderLogin *logHead = NULL, *logTail = NULL, *logCur = NULL;
+
+bool riderLogIN() {
+    string tempid, tempPass; 
+    cout << "\nEnter ID: ";
+    cin >> tempid;
+    cout << "Enter password: ";
+    cin >> tempPass;
+    bool validation = false;
+    riderLogin *p = logHead;
+    while (p != NULL) {
+        if (p -> Logid == tempid && p -> Logpassw == tempPass) {
+            validation = true;
+        }
+        p = p -> rNext;
+    }
+    return validation;
+}
 
 struct rideRecord {
     string order;
@@ -94,24 +106,49 @@ struct rideRecord {
     double amount;
     rideRecord *forw = NULL;
 };
+struct rider {
+    string id;
+    string name;
+    string bikeRegNo;
+    int totalOrders;
+    rider *next = NULL;
+    rideRecord *record = NULL;
+};
 
 rider *head = NULL, *tail = NULL, *current = NULL;
 
-int count = 0;
 void registerRider() {
     current = new rider;
-    current -> id = ++count;
+    logCur = new riderLogin;
     cout << "\nEnter your name: ";
     cin >> current -> name;
+    cout << "Set your logIn ID: ";
+    cin >> current -> id;
+    logCur -> Logid = current -> id; 
+    cout << "Set your password: ";
+    cin >> logCur -> Logpassw;
     cout << "Enter bike registration number: ";
     cin >> current -> bikeRegNo;
-    if (head == NULL) {
+    if (head == NULL && logHead == NULL) {
         head = tail = current;
+        logHead = logTail = logCur;
     }
     else {
         tail -> next = current;
         tail = current;
+        logTail -> rNext = logCur;
+        logTail = logCur;
     }
+}
+
+
+int main() {
+    registerRider();
+    bool temp = riderLogIN();
+    if (temp == true) {
+        cout << "True";
+    }
+    else cout << "False";
 }
 
 //**********************************************************************************//
