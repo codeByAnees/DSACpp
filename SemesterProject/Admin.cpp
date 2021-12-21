@@ -141,6 +141,51 @@ void registerRider() {
     }
 }
 
+rider *tempH = NULL, *tempT = NULL;
+
+void newRide() {
+    cout << "\n\t\tAvailable Riders";
+    rider *p = head;
+    rider *q = tempH;
+    while (p != NULL) {
+        while (p -> id != q -> id && q != NULL) {
+            q = q -> next;
+        }
+        if (p -> id == q -> id) {
+            p = p -> next;
+        }
+        else break;
+    }
+    while (true) {
+        rideRecord *a = new rideRecord;
+        cout << "Order? ";
+        cin >> a -> order;
+        cout << "Addres? ";
+        cin >> a -> address;
+        cout << "Bill? ";
+        cin >> a -> bill;
+        p -> totalOrders += 1;
+        if (p -> order == NULL) {
+            p -> order = a;
+        }
+        else {
+            a -> forw = p -> order;
+            p -> order = a;
+        }
+        string opt;
+        cout << "Enter 1 to assign another order to this rider or \nEnter any other number to quit: ";
+        cin >> opt;
+        if (opt == 1) continue;
+        else break;
+    }
+    if (tempH == NULL) {
+        tempH = tempT = p;
+    }
+    else {
+        tempT -> next = p;
+        tempT = p;
+    }
+}
 
 int main() {
     registerRider();
@@ -152,7 +197,3 @@ int main() {
 }
 
 //**********************************************************************************//
-
-
-
-
