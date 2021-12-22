@@ -36,7 +36,7 @@ void addMenu() {
     double tempbill;
     cout << "Enter new dish: ";
     cin >> temp;
-    cout << "Enter bill: ";
+    cout << "Enter cost: ";
     cin >> tempbill;
     menu.push_back(temp);
     bill.push_back(tempbill);
@@ -61,8 +61,6 @@ void delMenu() {
     } 
 }
 
-
-//*******************************************************************************************//
 
 struct rideRecord {
     string order;
@@ -200,8 +198,6 @@ void riderProfile() {
     else cout << "Wrong password or user ID";
 }
 
-//**********************************************************************************//
-
 
 struct customerRecord {
     string order;
@@ -281,7 +277,7 @@ void ordering() {
             }
         }
         if (tt == tbill) cout << "Sorry, we don't offer selected item";
-        cout << "Enter 1 to continue ordering or \nEnter any other key to exit: ";
+        cout << "\nEnter 1 to continue ordering or \nEnter any other key to exit: ";
         cin >> opt;
         if (opt != 1) break;
     }
@@ -289,7 +285,7 @@ void ordering() {
 
 void placeOrder() {
     int choice;
-    cout << "Enter 1 id you are a member \nEnter 2 if you are not a member: ";
+    cout << "\nEnter 1 id you are a member \nEnter 2 if you are not a member: ";
     cin >> choice;
     if (choice == 1) {
         if (cutomerLogIN()) {
@@ -300,6 +296,7 @@ void placeOrder() {
             }
             newRide(tempOrder, person -> address, tbill);
         }
+        else cout << "\nInvalid password or user ID!\n";
     }
     else {
         ordering();
@@ -317,38 +314,40 @@ void placeOrder() {
 void admin() {
     if (adminLogin()) {
         int opt;
-        cout << "Enter 1 to add menu \nEnter 2 delete menu \nEnter 3 to display menu"
-        "\nEnter 4 to check rider profile \nEnter 5 to calculate earning of the day"
-        "\nEnter 0 to exit--> ";
-        cin >> opt;
-        switch (opt) {
-            case 0:
-                break;
-            case 1:
-                addMenu();
-                break;
-            case 2:
-                delMenu();
-                break;
-            case 3:
-                displayMenu();
-                break;
-            case 4:
-                riderOrdersRecord();
-                break;
-            case 5:
-                //calEarning();
-                break;
-        }
+        do {
+            cout << "\nEnter 1 to add menu \nEnter 2 delete menu \nEnter 3 to display menu"
+            "\nEnter 4 to check rider profile \nEnter 5 to calculate earning of the day"
+            "\nEnter 0 to exit--> ";
+            cin >> opt;
+            switch (opt) {
+                case 0:
+                    break;
+                case 1:
+                    addMenu();
+                    break;
+                case 2:
+                    delMenu();
+                    break;
+                case 3:
+                    displayMenu();
+                    break;
+                case 4:
+                    riderOrdersRecord();
+                    break;
+                case 5:
+                    //calEarning();
+                    break;
+            }
+        } while (opt != 0);
     }
-    else cout << "Invalid password!";
+    else cout << "\nInvalid password or user ID!\n";
 }
 
 int main() {
     int opt;
     do {
-        cout << "Enter 1 for Admin \nEnter 2 for placing order" 
-           "\nEnter 3 to access rider profile"
+        cout << "\nEnter 1 for Admin \nEnter 2 for placing order" 
+           "\nEnter 3 to access rider menu"
            "\nEnter 4 registering new customer"
            "\nEnter 0 to QUIT --> ";
         cin >> opt;
