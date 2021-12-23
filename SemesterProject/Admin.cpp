@@ -19,6 +19,7 @@ struct adminLogIn {
 
 bool adminLogin() {
     adminLogIn *add = new adminLogIn;
+    cout << "\n\t\tA D M I N\n";
     cout << "\nEnter ID: ";
     cin >> add -> id;
     cout << "Enter password: ";
@@ -33,7 +34,7 @@ vector<string> menu = {"Fries", "Pizza", "Pasta", "Burger"};
 vector<double> bill = {100.0, 1000.0, 550.0, 600.0};
 void addMenu() {
     string temp;
-    double tempbill;
+    double tempbill = 0.0;
     cout << "Enter new dish: ";
     cin >> temp;
     cout << "Enter cost: ";
@@ -45,7 +46,7 @@ void addMenu() {
 
 void delMenu() {
     string temp;
-    cout << "Enter dish to del: ";
+    cout << "Enter dish to remove: ";
     cin >> temp;
     int tempindex = -1;
     for (int i = 0; i < menu.size(); i++) {
@@ -57,6 +58,7 @@ void delMenu() {
     if (tempindex == -1) cout << "Not found";
     else {
         menu.erase(menu.begin() + tempindex);
+        bill.erase(bill.begin() + tempindex);
         cout << "\nSuccessful\n";
     } 
 }
@@ -65,7 +67,7 @@ void delMenu() {
 struct rideRecord {
     string order;
     string address;
-    double amount;
+    double amount = 0.0;
     rideRecord *forw = NULL;
 };
 struct rider {
@@ -73,7 +75,7 @@ struct rider {
     string password;
     string name;
     string bikeRegNo;
-    int totalOrders;
+    int totalOrders = 0;
     rider *next = NULL;
     rideRecord *record = NULL;
 };
@@ -81,7 +83,8 @@ struct rider {
 rider *head = NULL, *tail = NULL, *current = NULL;
 rider *s = NULL;
 bool riderLogIN() {
-    string tempid, tempPass; 
+    string tempid, tempPass;
+    cout << "\n\t\tR I D E R\n";
     cout << "\nEnter ID: ";
     cin >> tempid;
     cout << "Enter password: ";
@@ -123,21 +126,18 @@ rider *tempH = NULL, *tempT = NULL;
 void newRide(string orderr, string addresss, double bill) {
     rider *p = head;
     rider *q = tempH;
-    if (q == NULL) {
-
-    }
-    else {
-        while (p != NULL) {
-            while (p -> id != q -> id && q != NULL) {
-                q = q -> next;
+    if (p != NULL) {
+        if (q != NULL) {
+            while (p != NULL) {
+                while (p -> id != q -> id && q != NULL) {
+                    q = q -> next;
+                }
+                if (p -> id == q -> id) {
+                    p = p -> next;
+                }
+                else break;
             }
-            if (p -> id == q -> id) {
-                p = p -> next;
-            }
-            else break;
         }
-    }
-    //while (true) {
         rideRecord *a = new rideRecord;
         a -> order = orderr;
         a -> address = addresss;
@@ -150,19 +150,15 @@ void newRide(string orderr, string addresss, double bill) {
             a -> forw = p -> record;
             p -> record = a;
         }
-    //     int opt;
-    //     cout << "Enter 1 to assign another order to this rider or \nEnter any other number to quit: ";
-    //     cin >> opt;
-    //     if (opt == 1) continue;
-    //     else break;
-    // }
-    if (tempH == NULL) {
-        tempH = tempT = p;
+        if (tempH == NULL) {
+            tempH = tempT = p;
+        }
+        else {
+            tempT -> next = p;
+            tempT = p;
+        }
     }
-    else {
-        tempT -> next = p;
-        tempT = p;
-    }
+    else cout << "\nNo rider available\n";
 }
 
 void riderOrdersRecord() {
@@ -212,7 +208,7 @@ void Rider() {
 
 struct customerRecord {
     string order;
-    double amount;
+    double amount = 0.0;
     customerRecord *Cforw = NULL;
 };
 struct customer {
@@ -225,9 +221,10 @@ struct customer {
 };
 
 customer *Chead = NULL, *Ctail = NULL, *Ccurrent = NULL;
-customer *person;
+customer *person = NULL;
 bool cutomerLogIN() {
     string tempid, tempPass; 
+    cout << "\n\t\tC U S T O M E R\n";
     cout << "\nEnter ID: ";
     cin >> tempid;
     cout << "Enter password: ";
@@ -271,7 +268,7 @@ void displayMenu() {
     }
 }
 
-vector<string> order;
+vector<string> orDer;
 double tbill = 0;
 void ordering() {
     int opt;
@@ -282,35 +279,39 @@ void ordering() {
         cin >> choose;
         for (int i = 0; i < menu.size(); i++) {
             if (menu[i] == choose) {
-                order.push_back(choose);
+                orDer.push_back(choose);
                 tbill += bill[i];
             }
         }
-        if (tt == tbill) cout << "Sorry, we don't offer selected item";
+        if (tt == tbill) {
+            cout << "Sorry, we don't offer selected item";
+        }
         cout << "\nEnter 1 to continue ordering or \nEnter any other key to exit: ";
         cin >> opt;
-        if (opt != 1) break;
+        if (opt != 1) {
+            break;
+        }
     }
 }
 
 struct orders {
     string Order;
-    double bill;
+    double bill = 0.0;
     orders *Next = NULL;
 };
 orders *orderH = NULL, *orderT = NULL, *orderC = NULL;
 
 void placeOrder() {
     int choice;
-    cout << "\nEnter 1 id you are a member \nEnter 2 if you are not a member: ";
+    cout << "\nEnter 1 if you are a member \nEnter 2 if you are not a member: ";
     cin >> choice;
     orderC = new orders;
     if (choice == 1) {
         if (cutomerLogIN()) {
             ordering();
             string tempOrder;
-            for (int i = 0; i < order.size(); i++) {
-                tempOrder += order[i] + " ";
+            for (int i = 0; i < orDer.size(); i++) {
+                tempOrder += orDer[i] + " ";
             }
             newRide(tempOrder, person -> address, tbill);
             customerRecord *curren = new customerRecord;
@@ -331,8 +332,8 @@ void placeOrder() {
     else {
         ordering();
         string tempOrder;
-        for (int i = 0; i < order.size(); i++) {
-            tempOrder += order[i] + " ";
+        for (int i = 0; i < orDer.size(); i++) {
+            tempOrder += orDer[i] + " ";
         }
         string address;
         cout << "Enter your address: ";
@@ -395,7 +396,7 @@ void Customer() {
 
 double calEarning() {
     orders *p = orderH;
-    double earnings;
+    double earnings = 0.0;
     while (p != NULL) {
         earnings += p -> bill;
         p = p -> Next;
