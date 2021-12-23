@@ -198,6 +198,17 @@ void riderProfile() {
     else cout << "Wrong password or user ID";
 }
 
+void Rider() {
+    int opt;
+    cout << "\nEnter 1 to register as a new rider"
+    "\nEnter 2 to access rider profile: ";
+    cin >> opt;
+    if (opt == 1) {
+        registerRider();
+    }
+    else riderProfile();
+}
+
 
 struct customerRecord {
     string order;
@@ -254,7 +265,7 @@ void newCustomerReg() {
 }
 
 void displayMenu() {
-    cout << "\nM E N U\n";
+    cout << "\n\t\tM E N U\n";
     for (int i = 0; i < menu.size(); i++) {
         cout << menu[i] << endl;
     }
@@ -262,7 +273,6 @@ void displayMenu() {
 
 vector<string> order;
 double tbill = 0;
-
 void ordering() {
     int opt;
     while (true) {
@@ -283,10 +293,18 @@ void ordering() {
     }
 }
 
+struct orders {
+    string Order;
+    double bill;
+    orders *Next = NULL;
+};
+orders *orderH = NULL, *orderT = NULL, *orderC = NULL;
+
 void placeOrder() {
     int choice;
     cout << "\nEnter 1 id you are a member \nEnter 2 if you are not a member: ";
     cin >> choice;
+    orderC = new orders;
     if (choice == 1) {
         if (cutomerLogIN()) {
             ordering();
@@ -295,6 +313,18 @@ void placeOrder() {
                 tempOrder += order[i] + " ";
             }
             newRide(tempOrder, person -> address, tbill);
+            customerRecord *curren = new customerRecord;
+            curren -> order = tempOrder;
+            curren -> amount = tbill;
+            if (person -> record == NULL) {
+                person -> record = curren;
+            }
+            else {
+                curren -> Cforw = person -> record;
+                person -> record = curren;
+            }
+            orderC -> Order = tempOrder;
+            orderC -> bill = tbill;
         }
         else cout << "\nInvalid password or user ID!\n";
     }
@@ -307,17 +337,189 @@ void placeOrder() {
         string address;
         cout << "Enter your address: ";
         cin >> address;
+        orderC -> Order = tempOrder;
+        orderC -> bill = tbill;
         newRide(tempOrder, address, tbill);
     }
+    if (orderH == NULL) {
+        orderH = orderT = orderC;
+    }
+    else {
+        orderT -> Next = orderC;
+        orderT = orderC;
+    }
+}
+
+void displayMembers() {
+    customer *p = Chead;
+    while (p != NULL) {
+        cout << "ID: " << p -> id << endl;
+        cout << "Name: " << p -> name << endl;
+        cout << "Address: " << p -> address << endl;
+        p = p -> Cnext;
+    }
+}
+
+void memberRecord() {
+    if (cutomerLogIN()) {
+        customerRecord *q = person -> record;
+        while (q != NULL) {
+            cout << "Order: " << q -> order << endl;
+            cout << "Bill :" << q -> amount << endl;
+            q = q -> Cforw;
+        }
+    }
+}
+
+void Customer() {
+    int opt;
+    do {
+        cout << "\nEnter 1 to register as a member \nEnter 2 to place an order"
+        "\nEnter 3 to access profile(members) \nEnter 0 to exit: ";
+        cin >> opt;
+        switch(opt) {
+            case 0:
+                break;
+            case 1:
+                newCustomerReg();
+                break;
+            case 2:
+                placeOrder();
+                break;
+            case 3:
+                memberRecord();
+                break;
+        }
+    } while (opt != 0);
+}
+
+double calEarning() {
+    orders *p = orderH;
+    double earnings;
+    while (p != NULL) {
+        earnings += p -> bill;
+        p = p -> Next;
+    }
+    return earnings;
+}
+
+void displayRiders() {
+    rider *p = head;
+    while (p != NULL) {
+        cout << "ID: " << p -> id << endl;
+        cout << "Name: " << p -> name << endl;
+        cout << "Bike regNo: " << p -> bikeRegNo << endl;
+        p = p -> next;
+    }
+}
+
+void removeRider() {
+    displayRiders();
+    string Id;
+    cout << "Enter ID of member to remove: ";
+    cin >> Id;
+    rider *p = head, *q = NULL;
+    while (p -> id != Id && p != NULL) {
+        q = p;
+        p = p -> next;
+    }
+    if (p -> id == Id && q == NULL) {
+        head = p -> next;
+        delete p;
+    }
+    else if (p -> id == Id && p == tail && q != NULL) {
+        q -> next = NULL;
+        tail = q;
+        delete p;
+    }
+    else {
+        q -> next = p -> next;
+        delete p;
+    }
+}
+
+void adminRider() {
+    if (adminLogin()) {
+        int opt;
+        do {
+            cout << "\nEnter 1 to add a rider \nEnter 2 remove a rider \nEnter 3 to view riders record"
+            "\nEnter 0 to exit -->";
+            cin >> opt;
+            switch(opt) {
+                case 0:
+                    break;
+                case 1:
+                    registerRider();
+                    break;
+                case 2:
+                    removeRider();
+                    break;
+                case 3:
+                    riderOrdersRecord();
+                    break;
+            }
+        } while (opt != 0);
+    }
+    else cout << "\nInvalid password or user ID!\n";
+}
+
+void removeMember() {
+    displayMembers();
+    string Id;
+    cout << "Enter ID of member to remove: ";
+    cin >> Id;
+    customer *p = Chead, *q = NULL;
+    while (p -> id != Id && p != NULL) {
+        q = p;
+        p = p -> Cnext;
+    }
+    if (p -> id == Id && q == NULL) {
+        Chead = p -> Cnext;
+        delete p;
+    }
+    else if (p -> id == Id && p == Ctail && q != NULL) {
+        q -> Cnext = NULL;
+        Ctail = q;
+        delete p;
+    }
+    else {
+        q -> Cnext = p -> Cnext;
+        delete p;
+    }
+}
+
+void adminMember() {
+    if (adminLogin()) {
+        int opt;
+        do {
+            cout << "\nEnter 1 to add a member \nEnter 2 remove a member"
+            "\nEnter 3 to display all members \nEnter 0 to exit -->";
+            cin >> opt;
+            switch(opt) {
+                case 0:
+                    break;
+                case 1:
+                    newCustomerReg();
+                    break;
+                case 2:
+                    removeMember();
+                    break;
+                case 3:
+                    displayMembers();
+                    break; 
+            }
+        } while (opt != 0);
+    }
+    else cout << "\nInvalid password or user ID!\n";
 }
 
 void admin() {
     if (adminLogin()) {
         int opt;
         do {
-            cout << "\nEnter 1 to add menu \nEnter 2 delete menu \nEnter 3 to display menu"
-            "\nEnter 4 to check rider profile \nEnter 5 to calculate earning of the day"
-            "\nEnter 0 to exit--> ";
+            cout << "\nEnter 1 to add item to menu \nEnter 2 delete item from menu \nEnter 3 to display menu"
+            "\nEnter 4 to access rider profile \nEnter 5 to access members profiles"
+            "\nEnter 6 to calculate earnings \nEnter 0 to exit--> ";
             cin >> opt;
             switch (opt) {
                 case 0:
@@ -332,10 +534,13 @@ void admin() {
                     displayMenu();
                     break;
                 case 4:
-                    riderOrdersRecord();
+                    adminRider();
                     break;
                 case 5:
-                    //calEarning();
+                    adminMember();
+                    break;
+                case 6:
+                    cout << "Total earnings are: " << calEarning() << endl;
                     break;
             }
         } while (opt != 0);
@@ -346,9 +551,9 @@ void admin() {
 int main() {
     int opt;
     do {
-        cout << "\nEnter 1 for Admin \nEnter 2 for placing order" 
-           "\nEnter 3 to access rider menu"
-           "\nEnter 4 registering new customer"
+        cout << "\nEnter 1 for Admin menu \nEnter 2 for customer menu" 
+           "\nEnter 3 for rider menu"
+           "\nEnter 4 for ordering food"
            "\nEnter 0 to QUIT --> ";
         cin >> opt;
         switch (opt) {
@@ -358,13 +563,13 @@ int main() {
                 admin();
                 break;
             case 2:
-                placeOrder();
+                Customer();
                 break;
             case 3:
-                riderProfile();
+                Rider();
                 break;
             case 4:
-                newCustomerReg();
+                placeOrder();
                 break;
         }
     } while (opt != 0);
