@@ -35,7 +35,7 @@ vector<double> bill = {100.0, 1000.0, 550.0, 600.0};
 void addMenu() {
     string temp;
     double tempbill = 0.0;
-    cout << "Enter new dish: ";
+    cout << "\nEnter new dish: ";
     cin >> temp;
     cout << "Enter cost: ";
     cin >> tempbill;
@@ -46,7 +46,7 @@ void addMenu() {
 
 void delMenu() {
     string temp;
-    cout << "Enter dish to remove: ";
+    cout << "\nEnter dish to remove: ";
     cin >> temp;
     int tempindex = -1;
     for (int i = 0; i < menu.size(); i++) {
@@ -55,7 +55,7 @@ void delMenu() {
             break;
         }
     }
-    if (tempindex == -1) cout << "Not found";
+    if (tempindex == -1) cout << "\nNot found\n";
     else {
         menu.erase(menu.begin() + tempindex);
         bill.erase(bill.begin() + tempindex);
@@ -104,12 +104,12 @@ bool riderLogIN() {
 
 void registerRider() {
     current = new rider;
-    cout << "\nEnter your name: ";
-    cin >> current -> name;
-    cout << "Set your logIn ID: ";
+    cout << "\nSet logIn ID: ";
     cin >> current -> id; 
-    cout << "Set your password: ";
+    cout << "Set password: ";
     cin >> current -> password;
+    cout << "Enter name of rider: ";
+    cin >> current -> name;
     cout << "Enter bike registration number: ";
     cin >> current -> bikeRegNo;
     if (head == NULL) {
@@ -119,10 +119,10 @@ void registerRider() {
         tail -> next = current;
         tail = current;
     }
+    cout << "\nSuccessful\n";
 }
 
 rider *tempH = NULL, *tempT = NULL;
-
 void newRide(string orderr, string addresss, double bill) {
     rider *p = head;
     rider *q = tempH;
@@ -157,6 +157,7 @@ void newRide(string orderr, string addresss, double bill) {
             tempT -> next = p;
             tempT = p;
         }
+        cout << "\nSuccessful\n";
     }
     else cout << "\nNo rider available\n";
 }
@@ -164,7 +165,7 @@ void newRide(string orderr, string addresss, double bill) {
 void riderOrdersRecord() {
     rider *a = head;
     while (a != NULL) {
-        cout << "Rider name: " << a -> name << endl;
+        cout << "\nRider name: " << a -> name << endl;
         cout << "Bike RegNo: " << a -> bikeRegNo << endl;
         cout << "Total order: " << a -> totalOrders << endl;
         rideRecord *b = a -> record;
@@ -180,7 +181,7 @@ void riderOrdersRecord() {
 
 void riderProfile() {
     if (riderLogIN()) {
-        cout << "Rider name: " << s -> name << endl;
+        cout << "\nRider name: " << s -> name << endl;
         cout << "Bike RegNo: " << s -> bikeRegNo << endl;
         cout << "Total order: " << s -> totalOrders << endl;
         rideRecord *n = s -> record;
@@ -191,20 +192,27 @@ void riderProfile() {
             n = n -> forw;
         }
     }
-    else cout << "Wrong password or user ID";
+    else cout << "\nWrong password or user ID\n";
 }
 
 void Rider() {
     int opt;
-    cout << "\nEnter 1 to register as a new rider"
-    "\nEnter 2 to access rider profile: ";
-    cin >> opt;
-    if (opt == 1) {
-        registerRider();
-    }
-    else riderProfile();
+    do {
+        cout << "\nEnter 1 to register as a new rider"
+        "\nEnter 2 to access rider profile \nEnter 0 to exit --> ";
+        cin >> opt;
+        switch(opt) {
+            case 0:
+                break;
+            case 1:
+                registerRider();
+                break;
+            case 2:
+                riderProfile();
+                break;
+        }
+    } while (opt != 0);
 }
-
 
 struct customerRecord {
     string order;
@@ -244,13 +252,13 @@ bool cutomerLogIN() {
 
 void newCustomerReg() {
     Ccurrent = new customer;
-    cout << "Set your ID: ";
+    cout << "\nSet log-in ID: ";
     cin >> Ccurrent -> id;
-    cout << "Set your password: ";
+    cout << "Set password: ";
     cin >> Ccurrent -> password;
-    cout << "Enter your name: ";
+    cout << "Enter name: ";
     cin >> Ccurrent -> name;
-    cout << "Enter your address: ";
+    cout << "Enter address: ";
     cin >> Ccurrent -> address;
     if (Chead == NULL) {
         Chead = Ctail = Ccurrent;
@@ -259,6 +267,7 @@ void newCustomerReg() {
         Ctail -> Cnext = Ccurrent;
         Ctail = Ccurrent;
     }
+    cout << "\nSuccessful\n";
 }
 
 void displayMenu() {
@@ -284,7 +293,7 @@ void ordering() {
             }
         }
         if (tt == tbill) {
-            cout << "Sorry, we don't offer selected item";
+            cout << "\nSorry, we don't offer selected item\n";
         }
         cout << "\nEnter 1 to continue ordering or \nEnter any other key to exit: ";
         cin >> opt;
@@ -294,18 +303,13 @@ void ordering() {
     }
 }
 
-struct orders {
-    string Order;
-    double bill = 0.0;
-    orders *Next = NULL;
-};
-orders *orderH = NULL, *orderT = NULL, *orderC = NULL;
+rideRecord *orderH = NULL, *orderT = NULL, *orderC = NULL;
 
 void placeOrder() {
     int choice;
     cout << "\nEnter 1 if you are a member \nEnter 2 if you are not a member: ";
     cin >> choice;
-    orderC = new orders;
+    orderC = new rideRecord;
     if (choice == 1) {
         if (cutomerLogIN()) {
             ordering();
@@ -324,8 +328,9 @@ void placeOrder() {
                 curren -> Cforw = person -> record;
                 person -> record = curren;
             }
-            orderC -> Order = tempOrder;
-            orderC -> bill = tbill;
+            orderC -> order = tempOrder;
+            orderC -> address = person -> address;
+            orderC -> amount = tbill;
         }
         else cout << "\nInvalid password or user ID!\n";
     }
@@ -336,25 +341,27 @@ void placeOrder() {
             tempOrder += orDer[i] + " ";
         }
         string address;
-        cout << "Enter your address: ";
+        cout << "Enter address to deliver: ";
         cin >> address;
-        orderC -> Order = tempOrder;
-        orderC -> bill = tbill;
+        orderC -> order = tempOrder;
+        orderC -> address = address;
+        orderC -> amount = tbill;
         newRide(tempOrder, address, tbill);
     }
     if (orderH == NULL) {
         orderH = orderT = orderC;
     }
     else {
-        orderT -> Next = orderC;
+        orderT -> forw = orderC;
         orderT = orderC;
     }
+    cout << "\nSuccessful\n";
 }
 
 void displayMembers() {
     customer *p = Chead;
     while (p != NULL) {
-        cout << "ID: " << p -> id << endl;
+        cout << "\nID: " << p -> id << endl;
         cout << "Name: " << p -> name << endl;
         cout << "Address: " << p -> address << endl;
         p = p -> Cnext;
@@ -365,18 +372,19 @@ void memberRecord() {
     if (cutomerLogIN()) {
         customerRecord *q = person -> record;
         while (q != NULL) {
-            cout << "Order: " << q -> order << endl;
+            cout << "\nOrder: " << q -> order << endl;
             cout << "Bill :" << q -> amount << endl;
             q = q -> Cforw;
         }
     }
+    else cout << "\nInvalid password or user ID!\n";
 }
 
 void Customer() {
     int opt;
     do {
         cout << "\nEnter 1 to register as a member \nEnter 2 to place an order"
-        "\nEnter 3 to access profile(members) \nEnter 0 to exit: ";
+        "\nEnter 3 to access profile(members) \nEnter 0 to exit --> ";
         cin >> opt;
         switch(opt) {
             case 0:
@@ -394,20 +402,23 @@ void Customer() {
     } while (opt != 0);
 }
 
-double calEarning() {
-    orders *p = orderH;
+void displayOrderRecAndCalEarning() {
+    rideRecord *p = orderH;
     double earnings = 0.0;
     while (p != NULL) {
-        earnings += p -> bill;
-        p = p -> Next;
+        cout << "Order: " << p -> order << endl;
+        cout << "Address: " << p -> address << endl;
+        cout << "Order bill: " << p -> amount << endl;
+        earnings += p -> amount;
+        p = p -> forw;
     }
-    return earnings;
+    cout << "\nTotal earnings are: " << earnings << endl;
 }
 
 void displayRiders() {
     rider *p = head;
     while (p != NULL) {
-        cout << "ID: " << p -> id << endl;
+        cout << "\nID: " << p -> id << endl;
         cout << "Name: " << p -> name << endl;
         cout << "Bike regNo: " << p -> bikeRegNo << endl;
         p = p -> next;
@@ -417,7 +428,7 @@ void displayRiders() {
 void removeRider() {
     displayRiders();
     string Id;
-    cout << "Enter ID of member to remove: ";
+    cout << "\nEnter ID of member to remove: ";
     cin >> Id;
     rider *p = head, *q = NULL;
     while (p -> id != Id && p != NULL) {
@@ -437,37 +448,35 @@ void removeRider() {
         q -> next = p -> next;
         delete p;
     }
+    cout << "\nSuccessful\n";
 }
 
 void adminRider() {
-    if (adminLogin()) {
-        int opt;
-        do {
-            cout << "\nEnter 1 to add a rider \nEnter 2 remove a rider \nEnter 3 to view riders record"
-            "\nEnter 0 to exit -->";
-            cin >> opt;
-            switch(opt) {
-                case 0:
-                    break;
-                case 1:
-                    registerRider();
-                    break;
-                case 2:
-                    removeRider();
-                    break;
-                case 3:
-                    riderOrdersRecord();
-                    break;
-            }
-        } while (opt != 0);
-    }
-    else cout << "\nInvalid password or user ID!\n";
+    int opt;
+    do {
+        cout << "\nEnter 1 to add a rider \nEnter 2 remove a rider \nEnter 3 to view riders record"
+        "\nEnter 0 to exit --> ";
+        cin >> opt;
+        switch(opt) {
+            case 0:
+                break;
+            case 1:
+                registerRider();
+                break;
+            case 2:
+                removeRider();
+                break;
+            case 3:
+                riderOrdersRecord();
+                break;
+        }
+    } while (opt != 0);
 }
 
 void removeMember() {
     displayMembers();
     string Id;
-    cout << "Enter ID of member to remove: ";
+    cout << "\nEnter ID of member to remove: ";
     cin >> Id;
     customer *p = Chead, *q = NULL;
     while (p -> id != Id && p != NULL) {
@@ -487,31 +496,29 @@ void removeMember() {
         q -> Cnext = p -> Cnext;
         delete p;
     }
+    cout << "\nSuccessful\n";
 }
 
 void adminMember() {
-    if (adminLogin()) {
-        int opt;
-        do {
-            cout << "\nEnter 1 to add a member \nEnter 2 remove a member"
-            "\nEnter 3 to display all members \nEnter 0 to exit -->";
-            cin >> opt;
-            switch(opt) {
-                case 0:
-                    break;
-                case 1:
-                    newCustomerReg();
-                    break;
-                case 2:
-                    removeMember();
-                    break;
-                case 3:
-                    displayMembers();
-                    break; 
-            }
-        } while (opt != 0);
-    }
-    else cout << "\nInvalid password or user ID!\n";
+    int opt;
+    do {
+        cout << "\nEnter 1 to add a member \nEnter 2 remove a member"
+        "\nEnter 3 to display all members \nEnter 0 to exit --> ";
+        cin >> opt;
+        switch(opt) {
+            case 0:
+                break;
+            case 1:
+                newCustomerReg();
+                break;
+            case 2:
+                removeMember();
+                break;
+            case 3:
+                displayMembers();
+                break; 
+        }
+    } while (opt != 0);
 }
 
 void admin() {
@@ -520,7 +527,7 @@ void admin() {
         do {
             cout << "\nEnter 1 to add item to menu \nEnter 2 delete item from menu \nEnter 3 to display menu"
             "\nEnter 4 to access rider profile \nEnter 5 to access members profiles"
-            "\nEnter 6 to calculate earnings \nEnter 0 to exit--> ";
+            "\nEnter 6 to view order record and total earnings \nEnter 0 to exit --> ";
             cin >> opt;
             switch (opt) {
                 case 0:
@@ -541,7 +548,7 @@ void admin() {
                     adminMember();
                     break;
                 case 6:
-                    cout << "Total earnings are: " << calEarning() << endl;
+                    displayOrderRecAndCalEarning();
                     break;
             }
         } while (opt != 0);
