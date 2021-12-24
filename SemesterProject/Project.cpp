@@ -157,26 +157,28 @@ void newRide(string orderr, string addresss, double bill) {
             tempT -> next = p;
             tempT = p;
         }
-        cout << "\nSuccessful\n";
     }
     else cout << "\nNo rider available\n";
 }
 
 void riderOrdersRecord() {
     rider *a = head;
-    while (a != NULL) {
-        cout << "\nRider name: " << a -> name << endl;
-        cout << "Bike RegNo: " << a -> bikeRegNo << endl;
-        cout << "Total order: " << a -> totalOrders << endl;
-        rideRecord *b = a -> record;
-        while (b != NULL) {
-            cout << "Order deliverd: " << b -> order << endl;
-            cout << "Order address: " << b -> address << endl;
-            cout << "Order bill: " << b -> amount << endl;
-            b = b -> forw;
+    if (a != NULL) {
+        while (a != NULL) {
+            cout << "\nRider name: " << a -> name << endl;
+            cout << "Bike RegNo: " << a -> bikeRegNo << endl;
+            cout << "Total order: " << a -> totalOrders << endl;
+            rideRecord *b = a -> record;
+            while (b != NULL) {
+                cout << "Order deliverd: " << b -> order << endl;
+                cout << "Order address: " << b -> address << endl;
+                cout << "Order bill: " << b -> amount << endl;
+                b = b -> forw;
+            }
+            a = a -> next;
         }
-        a = a -> next;
     }
+    else cout << "\nNo orders yet!\n";
 }
 
 void riderProfile() {
@@ -304,7 +306,6 @@ void ordering() {
 }
 
 rideRecord *orderH = NULL, *orderT = NULL, *orderC = NULL;
-
 void placeOrder() {
     int choice;
     cout << "\nEnter 1 if you are a member \nEnter 2 if you are not a member: ";
@@ -360,12 +361,15 @@ void placeOrder() {
 
 void displayMembers() {
     customer *p = Chead;
-    while (p != NULL) {
-        cout << "\nID: " << p -> id << endl;
-        cout << "Name: " << p -> name << endl;
-        cout << "Address: " << p -> address << endl;
-        p = p -> Cnext;
+    if (p != NULL) {
+        while (p != NULL) {
+            cout << "\nID: " << p -> id << endl;
+            cout << "Name: " << p -> name << endl;
+            cout << "Address: " << p -> address << endl;
+            p = p -> Cnext;
+        }
     }
+    else cout << "\nNo member to display!\n";
 }
 
 void memberRecord() {
@@ -404,51 +408,60 @@ void Customer() {
 
 void displayOrderRecAndCalEarning() {
     rideRecord *p = orderH;
-    double earnings = 0.0;
-    while (p != NULL) {
-        cout << "Order: " << p -> order << endl;
-        cout << "Address: " << p -> address << endl;
-        cout << "Order bill: " << p -> amount << endl;
-        earnings += p -> amount;
-        p = p -> forw;
+    if (p != NULL) {
+        double earnings = 0.0;
+        while (p != NULL) {
+            cout << "Order: " << p -> order << endl;
+            cout << "Address: " << p -> address << endl;
+            cout << "Order bill: " << p -> amount << endl;
+            earnings += p -> amount;
+            p = p -> forw;
+        }
+        cout << "\nTotal earnings are: " << earnings << endl;
     }
-    cout << "\nTotal earnings are: " << earnings << endl;
+    cout << "\nNo orders yet!\n";
 }
 
 void displayRiders() {
     rider *p = head;
-    while (p != NULL) {
-        cout << "\nID: " << p -> id << endl;
-        cout << "Name: " << p -> name << endl;
-        cout << "Bike regNo: " << p -> bikeRegNo << endl;
-        p = p -> next;
+    if (p != NULL) {
+        while (p != NULL) {
+            cout << "\nID: " << p -> id << endl;
+            cout << "Name: " << p -> name << endl;
+            cout << "Bike regNo: " << p -> bikeRegNo << endl;
+            p = p -> next;
+        }
     }
+    else cout << "\nNo rider to display!\n";
 }
 
 void removeRider() {
-    displayRiders();
-    string Id;
-    cout << "\nEnter ID of member to remove: ";
-    cin >> Id;
     rider *p = head, *q = NULL;
-    while (p -> id != Id && p != NULL) {
-        q = p;
-        p = p -> next;
+    if (p != NULL) {
+        displayRiders();
+        string Id;
+        cout << "\nEnter ID of member to remove: ";
+        cin >> Id;
+        while (p -> id != Id && p != NULL) {
+            q = p;
+            p = p -> next;
+        }
+        if (p -> id == Id && q == NULL) {
+            head = p -> next;
+            delete p;
+        }
+        else if (p -> id == Id && p == tail && q != NULL) {
+            q -> next = NULL;
+            tail = q;
+            delete p;
+        }
+        else {
+            q -> next = p -> next;
+            delete p;
+        }
+        cout << "\nSuccessful\n";
     }
-    if (p -> id == Id && q == NULL) {
-        head = p -> next;
-        delete p;
-    }
-    else if (p -> id == Id && p == tail && q != NULL) {
-        q -> next = NULL;
-        tail = q;
-        delete p;
-    }
-    else {
-        q -> next = p -> next;
-        delete p;
-    }
-    cout << "\nSuccessful\n";
+    else cout << "\nNo rider to remove!\n";
 }
 
 void adminRider() {
@@ -474,29 +487,32 @@ void adminRider() {
 }
 
 void removeMember() {
-    displayMembers();
-    string Id;
-    cout << "\nEnter ID of member to remove: ";
-    cin >> Id;
     customer *p = Chead, *q = NULL;
-    while (p -> id != Id && p != NULL) {
-        q = p;
-        p = p -> Cnext;
+    if (p != NULL) {
+        displayMembers();
+        string Id;
+        cout << "\nEnter ID of member to remove: ";
+        cin >> Id;
+        while (p -> id != Id && p != NULL) {
+            q = p;
+            p = p -> Cnext;
+        }
+        if (p -> id == Id && q == NULL) {
+            Chead = p -> Cnext;
+            delete p;
+        }
+        else if (p -> id == Id && p == Ctail && q != NULL) {
+            q -> Cnext = NULL;
+            Ctail = q;
+            delete p;
+        }
+        else {
+            q -> Cnext = p -> Cnext;
+            delete p;
+        }
+        cout << "\nSuccessful\n";
     }
-    if (p -> id == Id && q == NULL) {
-        Chead = p -> Cnext;
-        delete p;
-    }
-    else if (p -> id == Id && p == Ctail && q != NULL) {
-        q -> Cnext = NULL;
-        Ctail = q;
-        delete p;
-    }
-    else {
-        q -> Cnext = p -> Cnext;
-        delete p;
-    }
-    cout << "\nSuccessful\n";
+    else cout << "\nNo member to remove!\n";
 }
 
 void adminMember() {
