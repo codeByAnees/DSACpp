@@ -158,7 +158,7 @@ void newRide(string orderr, string addresss, double bill) {
             tempT = p;
         }
     }
-    else cout << "\nNo rider available\n";
+    else cout << "\nSorry, no rider available at the moment!\n";
 }
 
 void riderOrdersRecord() {
@@ -275,7 +275,7 @@ void newCustomerReg() {
 void displayMenu() {
     cout << "\n\t\tM E N U\n";
     for (int i = 0; i < menu.size(); i++) {
-        cout << menu[i] << endl;
+        cout << menu[i] << " -> " << bill[i] << endl;
     }
 }
 
@@ -307,7 +307,7 @@ void ordering() {
 
 rideRecord *orderH = NULL, *orderT = NULL, *orderC = NULL;
 void placeOrder() {
-    int choice;
+    int choice, option;
     cout << "\nEnter 1 if you are a member \nEnter 2 if you are not a member: ";
     cin >> choice;
     orderC = new rideRecord;
@@ -316,9 +316,17 @@ void placeOrder() {
             ordering();
             string tempOrder;
             for (int i = 0; i < orDer.size(); i++) {
-                tempOrder += orDer[i] + " ";
+                tempOrder += orDer[i] + ", ";
             }
-            newRide(tempOrder, person -> address, tbill);
+            cout << "\nEnter 1 for dine-in \nEnter 2 for delivery: ";
+            cin >> option;
+            if (option == 1) {
+                cout << "\nOk. Your order is getting ready!\n";
+            }
+            else {
+                newRide(tempOrder, person -> address, tbill);
+                cout << "\nYour order will be deliverd soon!\n";
+            }
             customerRecord *curren = new customerRecord;
             curren -> order = tempOrder;
             curren -> amount = tbill;
@@ -342,12 +350,20 @@ void placeOrder() {
             tempOrder += orDer[i] + " ";
         }
         string address;
-        cout << "Enter address to deliver: ";
-        cin >> address;
+        cout << "\nEnter 1 for dine-in \nEnter 2 for delivery: ";
+        cin >> option;
+        if (option == 1) {
+            cout << "\nOk. Your order is getting ready!\n";
+        }
+        else {
+            cout << "Enter address to deliver: ";
+            cin >> address;
+            newRide(tempOrder, address, tbill);
+            cout << "\nYour order will be deliverd soon!\n";
+        }
         orderC -> order = tempOrder;
         orderC -> address = address;
         orderC -> amount = tbill;
-        newRide(tempOrder, address, tbill);
     }
     if (orderH == NULL) {
         orderH = orderT = orderC;
@@ -575,7 +591,7 @@ void admin() {
 int main() {
     int opt;
     do {
-        cout << "\nEnter 1 for Admin menu \nEnter 2 for customer menu" 
+        cout << "\nEnter 1 for admin menu \nEnter 2 for customer menu" 
            "\nEnter 3 for rider menu"
            "\nEnter 4 for ordering food"
            "\nEnter 0 to QUIT --> ";
