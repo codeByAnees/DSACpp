@@ -1,7 +1,9 @@
-#include <iostream>
-#include <string>
-#include <cstring>
-#include <vector>
+#include<iostream>
+#include<climits>
+#include<string>
+#include<cstring>
+#include<vector>
+using namespace std;
 using std::cin;
 using std::cout;
 using std::endl;
@@ -100,6 +102,61 @@ bool riderLogIN() {
     }
     s = p;
     return validation;
+}
+
+vector<string> addresses;
+int totalAdd = 0;
+void deliveryAddresses() {
+    rider *p = head;
+    rideRecord *q = p -> record;
+    while (q != NULL) {
+        totalAdd++;
+        addresses.push_back(q -> address);
+        q = q -> forw;
+    }
+}
+
+void dijkstra(int **graph, int n) {
+    int distance[n];
+    bool visited[n];
+    for (int i = 0; i < n; i++) {
+        distance[i] = INT_MAX;
+        visited[i] = false;
+    }
+    distance[0] = 0;
+    for (int p = 0; p < n; p++) {
+        int min = -1;
+        for (int j = 0; j < n; j++) {
+            if (!visited[j] && (min == -1 || distance[j] < distance[min])) {
+                min = j;
+            }
+        }
+        visited[min] = true;
+        for (int k = 0; k < n; k++) {
+            if (graph[min][k] != 0 && (distance[min] + graph[min][k]) < distance[k]) {
+                distance[k] = distance[min] + graph[min][k];
+            }
+        }
+    }
+    cout << "Vertex     Distance from source" << endl;
+    for (int i = 1; i < n; i++) {
+        cout << addresses[i] << "              " << distance[i] << endl;
+    }
+}
+
+void getDistance() {
+    deliveryAddresses();
+    int **graph = new int*[totalAdd];
+    for (int i = 0; i < totalAdd; i++) {
+        graph[i] = new int[totalAdd];
+    }
+    for (int i = 0; i < totalAdd; i++) {
+        for (int j = 0; j < totalAdd; j++) {
+            cout << "Enter distance of " << addresses[i] << " to " << addresses[j] << endl;
+            cin >> graph[i][j];
+        }
+    }
+    dijkstra(graph, totalAdd);
 }
 
 void registerRider() {
@@ -594,6 +651,7 @@ int main() {
         cout << "\nEnter 1 for admin menu \nEnter 2 for customer menu" 
            "\nEnter 3 for rider menu"
            "\nEnter 4 for ordering food"
+           "\nEnter 5 for getting shortest distance"
            "\nEnter 0 to QUIT --> ";
         cin >> opt;
         switch (opt) {
@@ -610,6 +668,9 @@ int main() {
                 break;
             case 4:
                 placeOrder();
+                break;
+            case 5:
+                getDistance();
                 break;
         }
     } while (opt != 0);
