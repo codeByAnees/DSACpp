@@ -16,7 +16,7 @@ class sort {
 
     void mergesort(int list[], int first, int last) {
         int mid;
-        if (first < last) {
+        if (first <= last) {
             mid = (first + last) / 2;
             mergesort(list, first, mid);
             mergesort(list, mid + 1, last);
@@ -54,6 +54,7 @@ class sort {
             firstB = firstB + 1;
             index = index + 1;
         }
+
         index = first;
         while (index <= last) {
             list[index] = tempArray[index];

@@ -3,6 +3,7 @@
 #include<string>
 #include<cstring>
 #include<vector>
+#include<climits>
 using namespace std;
 using std::cin;
 using std::cout;
@@ -11,7 +12,7 @@ using std::vector;
 using std::string;
 
 int adminID = 0;
-string adminPass = "1234"; 
+string adminPass = "1234";
 
 struct adminLogIn {
     int id;

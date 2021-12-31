@@ -1,11 +1,10 @@
 #include<iostream>
 #include<climits>
-#include <cstdio>
-#include <deque>
+#include<cstdio>
+#include<deque>
 using namespace std;
 
 int n;
-
 bool vertixChecker(int i, int *vertices) {
     bool val = false;
     for (int j = 0; j < n; j++) {
@@ -111,14 +110,14 @@ int main() {
     // }
     n = 8;
     int graph[8][8] = {
-        {0,8,0,0,0,10,0,5},
-        {8,0,4,0,4,4,0,4},
-        {0,4,0,3,0,3,0,0},
-        {0,0,3,0,1,6,2,0},
-        {0,4,0,1,0,0,3,0},
-        {10,4,3,6,0,0,0,0},
-        {0,0,0,2,3,0,0,3},
-        {5,4,0,0,0,0,3,0}
+        {0, 8, 0, 0, 0, 10, 0, 5},
+        {8, 0, 4, 0, 4, 4, 0, 4},
+        {0, 4, 0, 3, 0, 3, 0, 0},
+        {0, 0, 3, 0, 1, 6, 2, 0},
+        {0, 4, 0, 1, 0, 0, 3, 0},
+        {10, 4, 3, 6, 0, 0, 0, 0},
+        {0, 0, 0, 2, 3, 0, 0, 3},
+        {5, 4, 0, 0, 0, 0, 3, 0}
     };
     kruskal(graph);
 }
