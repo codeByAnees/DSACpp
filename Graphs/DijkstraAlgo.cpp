@@ -2,7 +2,7 @@
 #include<climits>
 using namespace std;
 
-void dijkstra(int **graph, int n) {
+void dijkstra(int graph[][8], int n) {
     int distance[n];
     bool visited[n];
     for (int i = 0; i < n; i++) {
@@ -31,21 +31,21 @@ void dijkstra(int **graph, int n) {
 }
 
 int main() {
-    int rows, col;
-    cout << "\n\t\tD I J K S T R A\n";
-    cout << "\nEnter number of vertices: ";
-    cin >> rows;
-    col = rows;
-    int **graph = new int*[rows];
-    for (int i = 0; i < rows; i++) {
-        graph[i] = new int[col];
-    }
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < col; j++) {
-            cout << "Enter distance: ";
-            cin >> graph[i][j];
-        }
-    }
+    // int rows, col;
+    // cout << "\n\t\tD I J K S T R A\n";
+    // cout << "\nEnter number of vertices: ";
+    // cin >> rows;
+    // col = rows;
+    // int **graph = new int*[rows];
+    // for (int i = 0; i < rows; i++) {
+    //     graph[i] = new int[col];
+    // }
+    // for (int i = 0; i < rows; i++) {
+    //     for (int j = 0; j < col; j++) {
+    //         cout << "Enter distance: ";
+    //         cin >> graph[i][j];
+    //     }
+    // }
     // int graph[5][5] = {
     //                 {0, 5, 0, 10, 15},
     //                 {0, 0, 1, 4, 0},
@@ -61,5 +61,16 @@ int main() {
     //                 {0, 0, 0, 0, 7},
     //                 {0 ,0, 0, 9, 0}
     //                 };
-    dijkstra(graph, rows);
+
+    int graph[8][8] = {
+        {0,3,4,9,0,7,13,0},
+        {0,0,0,10,0,1,0,0},
+        {0,0,0,0,4,0,8,4},
+        {0,10,0,0,5,12,0,6},
+        {0,0,4,5,0,6,0,5},
+        {0,1,0,12,6,0,0,0},
+        {0,0,8,0,0,0,0,1},
+        {0,0,4,6,5,0,1,0},
+    };
+    dijkstra(graph, 8);
 }

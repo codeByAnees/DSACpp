@@ -66,7 +66,6 @@ void delMenu() {
     } 
 }
 
-
 struct rideRecord {
     string order;
     string address;
@@ -105,19 +104,15 @@ bool riderLogIN() {
     return validation;
 }
 
-vector<string> addresses;
-int totalAdd = 0;
+vector<string> addresses = {"Hostel City", "Faizabad", "Shamsabad", "Saddar", "6th-Road", "Commercial", "F-10", "I-10"};
+int totalAdd = 8;
 void deliveryAddresses() {
-    rider *p = head;
-    rideRecord *q = p -> record;
-    while (q != NULL) {
-        totalAdd++;
-        addresses.push_back(q -> address);
-        q = q -> forw;
+    for (int i = 1; i < addresses.size(); i++) {
+        cout << addresses[i] << endl;
     }
 }
 
-void dijkstra(int **graph, int n) {
+void dijkstra(int graph[][8], int n, int target) {
     int distance[n];
     bool visited[n];
     for (int i = 0; i < n; i++) {
@@ -139,25 +134,35 @@ void dijkstra(int **graph, int n) {
             }
         }
     }
-    cout << "Vertex     Distance from source" << endl;
-    for (int i = 1; i < n; i++) {
-        cout << addresses[i] << "              " << distance[i] << endl;
-    }
+    cout << "Shortest distance " << "is " << distance[target] << endl;
+    // cout << "Vertex     Distance from source" << endl;
+    // for (int i = 1; i < n; i++) {
+    //     cout << addresses[i] << "              " << distance[i] << endl;
+    // }
 }
 
-void getDistance() {
-    deliveryAddresses();
-    int **graph = new int*[totalAdd];
-    for (int i = 0; i < totalAdd; i++) {
-        graph[i] = new int[totalAdd];
-    }
-    for (int i = 0; i < totalAdd; i++) {
-        for (int j = 0; j < totalAdd; j++) {
-            cout << "Enter distance of " << addresses[i] << " to " << addresses[j] << endl;
-            cin >> graph[i][j];
-        }
-    }
-    dijkstra(graph, totalAdd);
+void getDistance(int target) {
+    // int **graph = new int*[totalAdd];
+    // for (int i = 0; i < totalAdd; i++) {
+    //     graph[i] = new int[totalAdd];
+    // }
+    // for (int i = 0; i < totalAdd; i++) {
+    //     for (int j = 0; j < totalAdd; j++) {
+    //         cout << "Enter distance of " << addresses[i] << " to " << addresses[j] << endl;
+    //         cin >> graph[i][j];
+    //     }
+    // }
+    int graph[8][8] = {
+        {0,3,4,9,0,7,13,0},
+        {0,0,0,10,0,1,0,0},
+        {0,0,0,0,4,0,8,4},
+        {0,10,0,0,5,12,0,6},
+        {0,0,4,5,0,6,0,5},
+        {0,1,0,12,6,0,0,0},
+        {0,0,8,0,0,0,0,1},
+        {0,0,4,6,5,0,1,0},
+    };
+    dijkstra(graph, 8, 7);
 }
 
 void registerRider() {
@@ -178,42 +183,6 @@ void registerRider() {
         tail = current;
     }
     cout << "\nSuccessful\n";
-}
-
-rider *tempH = NULL, *tempT = NULL;
-void newRide(string orderr, string addresss, double bill) {
-    rider *p = head;
-    rider *q = tempH;
-    if (q != NULL) {
-        while (p != NULL) {
-            while (p -> id != q -> id && q != NULL) {
-                q = q -> next;
-            }
-            if (p -> id == q -> id) {
-                p = p -> next;
-            }
-            else break;
-        }
-    }
-    rideRecord *a = new rideRecord;
-    a -> order = orderr;
-    a -> address = addresss;
-    a -> amount = bill;
-    p -> totalOrders += 1;
-    if (p -> record == NULL) {
-        p -> record = a;
-    }
-    else {
-        a -> forw = p -> record;
-        p -> record = a;
-    }
-    if (tempH == NULL) {
-        tempH = tempT = p;
-    }
-    else {
-        tempT -> next = p;
-        tempT = p;
-    }
 }
 
 void riderOrdersRecord() {
@@ -252,11 +221,31 @@ void riderProfile() {
     else cout << "\nWrong password or user ID\n";
 }
 
+void deliverOrder() {
+    if (riderLogIN()) {
+        rider *p = s;
+        if (p -> record != NULL) {
+            rideRecord *a = p -> record;
+            string deliveryAdd = a -> address;
+            int index = -1;
+            for (int i = 0; i < addresses.size(); i++) {
+                if (deliveryAdd == addresses[i]) {
+                    index = i;
+                    break;
+                }
+            }
+            getDistance(index);
+        }
+        else cout << "No order to deliver";
+    }
+    else cout << "\nWrong password or user ID\n";
+}
+
 void Rider() {
     int opt;
     do {
         cout << "\nEnter 1 to register as a new rider"
-        "\nEnter 2 to access rider profile \nEnter 0 to exit --> ";
+        "\nEnter 2 to access rider profile \nEnter 3 to deliver order \nEnter 0 to exit --> ";
         cin >> opt;
         switch(opt) {
             case 0:
@@ -266,6 +255,9 @@ void Rider() {
                 break;
             case 2:
                 riderProfile();
+                break;
+            case 3:
+                deliverOrder();
                 break;
         }
     } while (opt != 0);
@@ -360,152 +352,150 @@ void ordering() {
     }
 }
 
+void customerRec(string tempOrder, double totalBill) {
+    customerRecord *curren = new customerRecord;
+    curren -> order = tempOrder;
+    curren -> amount = totalBill;
+    if (person -> record == NULL) {
+        person -> record = curren;
+    }
+    else {
+        curren -> Cforw = person -> record;
+        person -> record = curren;
+    }
+}
+
 rideRecord *dHead = NULL, *dTail = NULL, *dCurr = NULL;
+void rideRec(string tempOrder, string address, double totalBill) {
+    dCurr = new rideRecord;
+    dCurr -> order = tempOrder;
+    dCurr -> address = address;
+    dCurr -> amount = totalBill;
+    if (dHead == NULL) {
+        dHead = dTail = dCurr;
+    }
+    else {
+        dTail -> forw = dCurr;
+        dTail = dCurr;
+    }
+}
 
 rideRecord *orderRecH = NULL, *orderRecT = NULL, *orderRecCu = NULL;
-void placeOrder() {
-    int choice, option;
-    bool check;
+void ordersRec(string tempOrder, string address, double totalBill) {
+    orderRecCu -> order = tempOrder;
+    orderRecCu -> address = address;
+    orderRecCu -> amount = totalBill;
+    if (orderRecH == NULL) {
+        orderRecH = orderRecT = orderRecCu;
+    }
+    else {
+        orderRecT -> forw = orderRecCu;
+        orderRecT = orderRecCu;
+    }
+}
+
+bool getDeliveryAddress(string add) {
+    bool check = false;
+    for (int i = 0; i < addresses.size(); i++) {
+        if (add == addresses[i]) {
+            check = true;
+            break;
+        }
+    }
+    return check;
+}
+
+void memberOrder() {
     string tempOrder;
     string address;
-    cout << "\nEnter 1 if you are a member \nEnter 2 if you are not a member: ";
+    int choice, option;
+    ordering();
+    for (int i = 0; i < orderRec.size(); i++) {
+        tempOrder += orderRec[i] + ", ";
+    }
+    cout << "\nEnter 1 for dine-in \nEnter 2 for delivery \nEnter 3 to exit: ";
+    cin >> option;
+    if (option == 1) {
+        cout << "\nOk. Your order is getting ready!\n";
+        customerRec(tempOrder, totalBill);
+        ordersRec(tempOrder, address, totalBill);
+    }
+    else if (option == 2) {
+        rider *p = head;
+        if (p != NULL) {
+            deliveryAddresses();
+            cout << "Enter address to deliver: ";
+            cin >> address;
+            if (getDeliveryAddress(address)) {
+                address = person -> address;
+                rideRec(tempOrder, address, totalBill);
+                customerRec(tempOrder, totalBill);
+                ordersRec(tempOrder, address, totalBill);
+                cout << "\nYour order will be deliverd soon!\n";
+            }
+            else {
+                cout << "\nSorry, we are currently not delivering in the selected area";
+                memberOrder();
+            }
+        }
+        else {
+            cout << "\nSorry, no rider available at the moment!\n";
+            memberOrder();
+        }
+    }
+}
+
+void nonMemberOrder() {
+    string tempOrder;
+    string address;
+    int choice, option;
+    ordering();
+    for (int i = 0; i < orderRec.size(); i++) {
+        tempOrder += orderRec[i] + ", ";
+    }
+    cout << "\nEnter 1 for dine-in \nEnter 2 for delivery \nEnter 3 to exit: ";
+    cin >> option;
+    if (option == 1) {
+        cout << "\nOk. Your order is getting ready!\n";
+        ordersRec(tempOrder, address, totalBill);
+    }
+    else if (option == 2) {
+        rider *p = head;
+        if (p != NULL) {
+            deliveryAddresses();
+            cout << "Enter address to deliver: ";
+            cin >> address;
+            if (getDeliveryAddress(address)) {
+                rideRec(tempOrder, address, totalBill);
+                ordersRec(tempOrder, address, totalBill);
+                cout << "\nYour order will be deliverd soon!\n";
+            }
+            else {
+                cout << "\nSorry, we are currently not delivering in the selected area";
+                nonMemberOrder();
+            }
+        }
+        else {
+            cout << "\nSorry, no rider available at the moment!\n";
+            nonMemberOrder();
+        }
+    }
+}
+
+void placeOrder() {
+    int choice;
+    cout << "\nEnter 1 if you are a member \nEnter 2 if you are not a member"
+    "\nEnter 3 to exit: ";
     cin >> choice;
     orderRecCu = new rideRecord;
     if (choice == 1) {
         if (cutomerLogIN()) {
-            ordering();
-            for (int i = 0; i < orderRec.size(); i++) {
-                tempOrder += orderRec[i] + ", ";
-            }
-            cout << "\nEnter 1 for dine-in \nEnter 2 for delivery: ";
-            cin >> option;
-            if (option == 1) {
-                cout << "\nOk. Your order is getting ready!\n";
-                check = true;
-                customerRecord *curren = new customerRecord;
-                curren -> order = tempOrder;
-                curren -> amount = totalBill;
-                if (person -> record == NULL) {
-                    person -> record = curren;
-                }
-                else {
-                    curren -> Cforw = person -> record;
-                    person -> record = curren;
-                }
-            }
-            else {
-                rider *p = head;
-                if (p != NULL) {
-                    dCurr = new rideRecord;
-                    dCurr -> order = tempOrder;
-                    dCurr -> address = person -> address;
-                    dCurr -> amount = totalBill;
-                    if (dHead == NULL) {
-                        dHead = dTail = dCurr;
-                    }
-                    else {
-                        dTail -> forw = dCurr;
-                        dTail = dCurr;
-                    }
-                    address = person -> address;
-                    check = true;
-                    customerRecord *curren = new customerRecord;
-                    curren -> order = tempOrder;
-                    curren -> amount = totalBill;
-                    if (person -> record == NULL) {
-                        person -> record = curren;
-                    }
-                    else {
-                        curren -> Cforw = person -> record;
-                        person -> record = curren;
-                    }
-                    cout << "\nYour order will be deliverd soon!\n";
-                }
-                else {
-                    cout << "\nSorry, no rider available at the moment!\n";
-                    int x;
-                    cout << "\nEnter 1 for dine-in \nEnter 2 to cancel: ";
-                    cin >> x;
-                    if (x == 1) {
-                        cout << "\nOk. Your order is getting ready!\n";
-                        check = true;
-                        customerRecord *curren = new customerRecord;
-                        curren -> order = tempOrder;
-                        curren -> amount = totalBill;
-                        if (person -> record == NULL) {
-                            person -> record = curren;
-                        }
-                        else {
-                            curren -> Cforw = person -> record;
-                            person -> record = curren;
-                        }
-                    }
-                    else {
-                        cout << "\nSorry for inconvenience";
-                        check = false;
-                    }
-                }
-            }
+            memberOrder();
         }
         else cout << "\nInvalid password or user ID!\n";
     }
-    else {
-        ordering();
-        for (int i = 0; i < orderRec.size(); i++) {
-            tempOrder += orderRec[i] + ", ";
-        }
-        cout << "\nEnter 1 for dine-in \nEnter 2 for delivery: ";
-        cin >> option;
-        if (option == 1) {
-            cout << "\nOk. Your order is getting ready!\n";
-            check = true;
-        }
-        else {
-            rider *p = head;
-            if (p != NULL) {
-                cout << "Enter address to deliver: ";
-                cin >> address;
-                dCurr = new rideRecord;
-                dCurr -> order = tempOrder;
-                dCurr -> address = address;
-                dCurr -> amount = totalBill;
-                if (dHead == NULL) {
-                    dHead = dTail = dCurr;
-                }
-                else {
-                    dTail -> forw = dCurr;
-                    dTail = dCurr;
-                }
-                check = true;
-                cout << "\nYour order will be deliverd soon!\n";
-            }
-            else {
-                cout << "\nSorry, no rider available at the moment!\n";
-                int x;
-                cout << "\nEnter 1 for dine-in \nEnter 2 to cancel: ";
-                cin >> x;
-                if (option == 1) {
-                    cout << "\nOk. Your order is getting ready!\n";
-                    check = true;
-                }
-                else {
-                    cout << "\nSorry for inconvenience";
-                    check = false;
-                }
-            }
-        }
-    }
-    if (check) {
-        orderRecCu -> order = tempOrder;
-        orderRecCu -> address = address;
-        orderRecCu -> amount = totalBill;
-        if (orderRecH == NULL) {
-            orderRecH = orderRecT = orderRecCu;
-        }
-        else {
-            orderRecT -> forw = orderRecCu;
-            orderRecT = orderRecCu;
-        }
+    else if (choice == 2) {
+        nonMemberOrder();
     }
     totalBill = 0.0;
     orderRec.clear();
@@ -703,7 +693,7 @@ void displayDeliveryOrders() {
             p = p -> forw;
         }
     }
-    else cout << "\nNo order to deliver";
+    else cout << "\nNo order to deliver\n";
 }
 
 void assignOrder() {
@@ -734,6 +724,7 @@ void assignOrder() {
                 Temp -> forw = p -> record;
                 p -> record = Temp;
             }
+            p -> totalOrders += 1;
             dHead = k -> forw;
             delete k;
         }
@@ -746,7 +737,7 @@ void admin() {
         do {
             cout << "\nEnter 1 to add item to menu \nEnter 2 delete item from menu \nEnter 3 to display menu"
             "\nEnter 4 to access rider profile \nEnter 5 to access members profiles"
-            "\nEnter 6 to deliver order"
+            "\nEnter 6 to assign the order to rider"
             "\nEnter 7 to view order record and total earnings \nEnter 0 to exit --> ";
             cin >> opt;
             switch (opt) {
@@ -785,7 +776,6 @@ int main() {
         cout << "\nEnter 1 for admin menu \nEnter 2 for customer menu" 
            "\nEnter 3 for rider menu"
            "\nEnter 4 for ordering food"
-           "\nEnter 5 for getting shortest distance"
            "\nEnter 0 to QUIT --> ";
         cin >> opt;
         switch (opt) {
@@ -802,9 +792,6 @@ int main() {
                 break;
             case 4:
                 placeOrder();
-                break;
-            case 5:
-                getDistance();
                 break;
         }
     } while (opt != 0);
