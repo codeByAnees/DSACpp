@@ -141,7 +141,7 @@ void dijkstra(int graph[][8], int n, int target) {
     // }
 }
 
-void getDistance(int target) {
+void getDistance() {
     // int **graph = new int*[totalAdd];
     // for (int i = 0; i < totalAdd; i++) {
     //     graph[i] = new int[totalAdd];
@@ -152,6 +152,16 @@ void getDistance(int target) {
     //         cin >> graph[i][j];
     //     }
     // }
+    rider *p = s;
+    rideRecord *a = p -> record;
+    string deliveryAdd = a -> address;
+    int index = -1;
+    for (int i = 0; i < addresses.size(); i++) {
+        if (deliveryAdd == addresses[i]) {
+            index = i;
+            break;
+        }
+    }
     int graph[8][8] = {
         {0,3,4,9,0,7,13,0},
         {0,0,0,10,0,1,0,0},
@@ -162,7 +172,7 @@ void getDistance(int target) {
         {0,0,8,0,0,0,0,1},
         {0,0,4,6,5,0,1,0},
     };
-    dijkstra(graph, 8, 7);
+    dijkstra(graph, 8, index);
 }
 
 void registerRider() {
@@ -225,16 +235,7 @@ void deliverOrder() {
     if (riderLogIN()) {
         rider *p = s;
         if (p -> record != NULL) {
-            rideRecord *a = p -> record;
-            string deliveryAdd = a -> address;
-            int index = -1;
-            for (int i = 0; i < addresses.size(); i++) {
-                if (deliveryAdd == addresses[i]) {
-                    index = i;
-                    break;
-                }
-            }
-            getDistance(index);
+            getDistance();
         }
         else cout << "No order to deliver";
     }
