@@ -33,8 +33,14 @@ bool adminLogin() {
     else return false;
 }
 
-vector<string> menu = {"Fries", "Pizza", "Pasta", "Burger"};
-vector<double> bill = {100.0, 1000.0, 550.0, 600.0};
+vector<string> menu = {
+    "Pasta + 250ml soft drink",
+    "Zinger Burger + 250ml soft drink",
+    "Small pizza + 250ml cold drink",
+    "Medium pizza + 500ml soft drink",
+    "Large pizza + 1000ml soft drink"
+};
+vector<double> bill = {499.0, 450.0, 549.0, 849.0, 1199.0};
 void addMenu() {
     string temp;
     double tempbill = 0.0;
@@ -105,14 +111,14 @@ bool riderLogIN() {
 }
 
 vector<string> addresses = {"Hostel City", "Faizabad", "Shamsabad", "Saddar", "6th-Road", "Commercial", "F-10", "I-10"};
-int totalAdd = 8;
 void deliveryAddresses() {
+    cout << "\n\t\tDelivery Addresses";
     for (int i = 1; i < addresses.size(); i++) {
         cout << addresses[i] << endl;
     }
 }
 
-void dijkstra(int graph[][8], int n, int target) {
+void dijkstra(int **graph, int n, int target) {
     int distance[n];
     bool visited[n];
     for (int i = 0; i < n; i++) {
@@ -134,24 +140,57 @@ void dijkstra(int graph[][8], int n, int target) {
             }
         }
     }
-    cout << "Shortest distance " << "is " << distance[target] << endl;
-    // cout << "Vertex     Distance from source" << endl;
-    // for (int i = 1; i < n; i++) {
-    //     cout << addresses[i] << "              " << distance[i] << endl;
-    // }
+    cout << "Shortest distance from our cafe to " << addresses[target] << " is " << distance[target] << endl;
 }
 
 void getDistance() {
-    // int **graph = new int*[totalAdd];
-    // for (int i = 0; i < totalAdd; i++) {
-    //     graph[i] = new int[totalAdd];
-    // }
-    // for (int i = 0; i < totalAdd; i++) {
-    //     for (int j = 0; j < totalAdd; j++) {
-    //         cout << "Enter distance of " << addresses[i] << " to " << addresses[j] << endl;
-    //         cin >> graph[i][j];
-    //     }
-    // }
+    int totalAdd = 8;
+    int **graph = new int*[totalAdd];
+    for (int i = 0; i < totalAdd; i++) {
+        graph[i] = new int[totalAdd];
+    }
+    for (int i = 0; i < totalAdd; i++) {
+        for (int j = 0; j < totalAdd; j++) {
+            graph[i][j] = 0;
+        }
+    }
+    // source(Hostel city) to other locations
+    graph[0][1] = 3;
+    graph[0][2] = 4;
+    graph[0][3] = 9;
+    graph[0][5] = 7;
+    graph[0][6] = 13;
+
+    graph[1][3] = 10;
+    graph[1][5] = 1;
+
+    graph[2][4] = 4;
+    graph[2][6] = 8;
+    graph[2][7] = 4;
+    
+    graph[3][1] = 10;
+    graph[3][4] = 5;
+    graph[3][5] = 12;
+    graph[3][7] = 6;
+
+    graph[4][2] = 4;
+    graph[4][3] = 5;
+    graph[4][5] = 6;
+    graph[4][7] = 5;
+
+    graph[5][1] = 1;
+    graph[5][3] = 12;
+    graph[5][4] = 6;
+    
+    graph[6][2] = 8;
+    graph[6][7] = 1;
+
+    graph[7][2] = 4;
+    graph[7][3] = 6;
+    graph[7][4] = 5;
+    graph[7][6] = 1;
+
+    // getting location
     rider *p = s;
     rideRecord *a = p -> record;
     string deliveryAdd = a -> address;
@@ -162,17 +201,7 @@ void getDistance() {
             break;
         }
     }
-    int graph[8][8] = {
-        {0,3,4,9,0,7,13,0},
-        {0,0,0,10,0,1,0,0},
-        {0,0,0,0,4,0,8,4},
-        {0,10,0,0,5,12,0,6},
-        {0,0,4,5,0,6,0,5},
-        {0,1,0,12,6,0,0,0},
-        {0,0,8,0,0,0,0,1},
-        {0,0,4,6,5,0,1,0},
-    };
-    dijkstra(graph, 8, index);
+    dijkstra(graph, totalAdd, index);
 }
 
 void registerRider() {
@@ -321,9 +350,11 @@ void newCustomerReg() {
 }
 
 void displayMenu() {
-    cout << "\n\t\tM E N U\n";
+    cout << "\n\t\tC A F E - M E N U\n";
+    int n = 0;
     for (int i = 0; i < menu.size(); i++) {
-        cout << menu[i] << " -> " << bill[i] << endl;
+        cout << "\nEnter " << ++n << " for" << endl;
+        cout << menu[i] << " --> " << bill[i] << endl;
     }
 }
 
@@ -334,8 +365,28 @@ void ordering() {
     while (true) {
         double tempBill = totalBill;
         string choose;
+        int a;
         displayMenu();
-        cin >> choose;
+        cin >> a;
+        switch(a) {
+            case 1:
+                choose = "Pasta + 250ml soft drink";
+                break;
+            case 2:
+                choose = "Zinger Burger + 250ml soft drink";
+                break;
+            case 3:
+                choose = "Small pizza + 250ml cold drink";
+                break;
+            case 4:
+                choose = "Medium pizza + 500ml soft drink";
+                break;
+            case 5:
+                choose = "Large pizza + 1000ml soft drink";
+                break;
+            default:
+                cout << "Invalid choice";
+        }
         for (int i = 0; i < menu.size(); i++) {
             if (menu[i] == choose) {
                 orderRec.push_back(choose);
