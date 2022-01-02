@@ -186,7 +186,6 @@ void getDistance() {
     graph[7][3] = 6;
     graph[7][4] = 5;
     graph[7][6] = 1;
-
     // getting location
     rider *p = s;
     rideRecord *a = p -> record;
@@ -454,6 +453,13 @@ bool getDeliveryAddress(string add) {
     return check;
 }
 
+void displayPlacedOrder() {
+    cout << "\n\t\tOrder Details\n";
+    rideRecord *p = orderRecT;
+    cout << "You ordered: " << p -> order << endl;
+    cout << "Total amount: " << p -> amount << endl;
+}
+
 void memberOrder() {
     string tempOrder;
     string address;
@@ -468,6 +474,7 @@ void memberOrder() {
         cout << "\nOk. Your order is getting ready!\n";
         customerRec(tempOrder, totalBill);
         ordersRec(tempOrder, address, totalBill);
+        displayPlacedOrder();
     }
     else if (option == 2) {
         rider *p = head;
@@ -480,6 +487,7 @@ void memberOrder() {
                 rideRec(tempOrder, address, totalBill);
                 customerRec(tempOrder, totalBill);
                 ordersRec(tempOrder, address, totalBill);
+                displayPlacedOrder();
                 cout << "\nYour order will be deliverd soon!\n";
             }
             else {
@@ -507,6 +515,7 @@ void nonMemberOrder() {
     if (option == 1) {
         cout << "\nOk. Your order is getting ready!\n";
         ordersRec(tempOrder, address, totalBill);
+        displayPlacedOrder();
     }
     else if (option == 2) {
         rider *p = head;
@@ -517,6 +526,7 @@ void nonMemberOrder() {
             if (getDeliveryAddress(address)) {
                 rideRec(tempOrder, address, totalBill);
                 ordersRec(tempOrder, address, totalBill);
+                displayPlacedOrder();
                 cout << "\nYour order will be deliverd soon!\n";
             }
             else {
