@@ -109,7 +109,7 @@ bool riderLogIN() {
 
 vector<string> addresses = {"Hostel City", "Faizabad", "Shamsabad", "Saddar", "6th-Road", "Commercial", "F-10", "I-10"};
 void deliveryAddresses() {
-    cout << "\n\t\tDelivery Addresses";
+    cout << "\n\t\tDelivery Addresses\n";
     for (int i = 1; i < addresses.size(); i++) {
         cout << addresses[i] << endl;
     }
@@ -117,9 +117,11 @@ void deliveryAddresses() {
 
 void dijkstra(int **graph, int n, int target) {
     int distance[n];
+    int parent[n];
     bool visited[n];
     for (int i = 0; i < n; i++) {
         distance[i] = INT_MAX;
+        parent[i] = INT_MAX;
         visited[i] = false;
     }
     distance[0] = 0;
@@ -134,10 +136,23 @@ void dijkstra(int **graph, int n, int target) {
         for (int k = 0; k < n; k++) {
             if (graph[min][k] != 0 && (distance[min] + graph[min][k]) < distance[k]) {
                 distance[k] = distance[min] + graph[min][k];
+                parent[k] = min;
             }
         }
     }
-    cout << "Shortest distance from our cafe to " << addresses[target] << " is " << distance[target] << endl;
+    string temp = "Hostel City -> ";
+    if (parent[target] != 0) {
+        int a = parent[target];
+        while (a != 0) {
+            temp += addresses[a] + " -> ";
+            a = parent[a];
+        }
+        temp += addresses[target];
+        cout << "Shortest path is " << temp << " with total cost " << distance[target] << endl; 
+    }
+    else {
+        cout << "Shortest distance from cafe to " << addresses[target] << " is " << distance[target] << endl;
+    }
 }
 
 void getDistance() {
@@ -458,6 +473,7 @@ void displayPlacedOrder() {
     rideRecord *p = orderRecT;
     cout << "You ordered: " << p -> order << endl;
     cout << "Total amount: " << p -> amount << endl;
+    cout << "Thank you!" << endl;
 }
 
 void memberOrder() {
@@ -492,12 +508,22 @@ void memberOrder() {
             }
             else {
                 cout << "\nSorry, we are currently not delivering in the selected area";
-                memberOrder();
+                int d;
+                cout << "\nContinue -> 1 \n Exit -> 2";
+                cin >> d;
+                if (d == 1) {
+                    memberOrder();
+                }
             }
         }
         else {
             cout << "\nSorry, no rider available at the moment!\n";
-            memberOrder();
+            int d;
+            cout << "\nContinue -> 1 \n Exit -> 2";
+            cin >> d;
+            if (d == 1) {
+                memberOrder();
+            }
         }
     }
 }
@@ -531,12 +557,22 @@ void nonMemberOrder() {
             }
             else {
                 cout << "\nSorry, we are currently not delivering in the selected area";
-                nonMemberOrder();
+                int d;
+                cout << "\nContinue -> 1 \n Exit -> 2";
+                cin >> d;
+                if (d == 1) {
+                    nonMemberOrder();
+                }
             }
         }
         else {
             cout << "\nSorry, no rider available at the moment!\n";
-            nonMemberOrder();
+            int d;
+            cout << "\nContinue -> 1 \n Exit -> 2";
+            cin >> d;
+            if (d == 1) {
+                nonMemberOrder();
+            }
         }
     }
 }
@@ -786,6 +822,7 @@ void assignOrder() {
             p -> totalOrders += 1;
             dHead = k -> forw;
             delete k;
+            cout << "\nSuccessful!" << endl;
         }
     }
 }
