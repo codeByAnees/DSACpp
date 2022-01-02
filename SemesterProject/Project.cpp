@@ -1,10 +1,7 @@
 #include<iostream>
 #include<climits>
 #include<string>
-#include<cstring>
 #include<vector>
-#include<climits>
-using namespace std;
 using std::cin;
 using std::cout;
 using std::endl;
@@ -396,7 +393,7 @@ void ordering() {
         if (tempBill == totalBill) {
             cout << "\nSorry, we don't offer selected item\n";
         }
-        cout << "\nEnter 1 to continue ordering or \nEnter any other key to exit: ";
+        cout << "\nContinue ordering -> 1 \nExit -> 2: ";
         cin >> opt;
         if (opt != 1) {
             break;
@@ -465,7 +462,7 @@ void memberOrder() {
     for (int i = 0; i < orderRec.size(); i++) {
         tempOrder += orderRec[i] + ", ";
     }
-    cout << "\nEnter 1 for dine-in \nEnter 2 for delivery \nEnter 3 to exit: ";
+    cout << "\nDine-in -> 1 \nDelivery -> 2 \nExit -> 3: ";
     cin >> option;
     if (option == 1) {
         cout << "\nOk. Your order is getting ready!\n";
@@ -505,7 +502,7 @@ void nonMemberOrder() {
     for (int i = 0; i < orderRec.size(); i++) {
         tempOrder += orderRec[i] + ", ";
     }
-    cout << "\nEnter 1 for dine-in \nEnter 2 for delivery \nEnter 3 to exit: ";
+    cout << "\nDine-in -> 1 \nDelivery -> 2 \nExit -> 3: ";
     cin >> option;
     if (option == 1) {
         cout << "\nOk. Your order is getting ready!\n";
@@ -536,8 +533,8 @@ void nonMemberOrder() {
 
 void placeOrder() {
     int choice;
-    cout << "\nEnter 1 if you are a member \nEnter 2 if you are not a member"
-    "\nEnter 3 to exit: ";
+    cout << "\nMembers - 1 \nNon-members - 2"
+    "\nExit - 3: ";
     cin >> choice;
     orderRecCu = new rideRecord;
     if (choice == 1) {
@@ -637,7 +634,7 @@ void removeRider() {
     if (p != NULL) {
         displayRiders();
         string Id;
-        cout << "\nEnter ID of member to remove: ";
+        cout << "\nEnter rider ID to remove: ";
         cin >> Id;
         while (p -> id != Id && p != NULL) {
             q = p;
@@ -688,7 +685,7 @@ void removeMember() {
     if (p != NULL) {
         displayMembers();
         string Id;
-        cout << "\nEnter ID of member to remove: ";
+        cout << "\nEnter member ID to remove: ";
         cin >> Id;
         while (p -> id != Id && p != NULL) {
             q = p;
@@ -787,7 +784,7 @@ void admin() {
     if (adminLogin()) {
         int opt;
         do {
-            cout << "\nEnter 1 to add item to menu \nEnter 2 delete item from menu \nEnter 3 to display menu"
+            cout << "\nEnter 1 to add item to menu \nEnter 2 delete item from menu \nEnter 3 to display food menu"
             "\nEnter 4 to access rider profile \nEnter 5 to access members profiles"
             "\nEnter 6 to assign the order to rider"
             "\nEnter 7 to view order record and total earnings \nEnter 0 to exit --> ";
@@ -825,6 +822,9 @@ void admin() {
 int main() {
     int opt;
     do {
+        cout << "\n\t*****************************\n"
+        "\n\tT a b l e - T a l k - C a f e\n"
+        "\n\t*****************************\n";
         cout << "\nEnter 1 for admin menu \nEnter 2 for customer menu" 
            "\nEnter 3 for rider menu"
            "\nEnter 4 for ordering food"
