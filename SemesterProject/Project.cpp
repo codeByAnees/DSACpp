@@ -1,6 +1,5 @@
 #include<iostream>
 #include<climits>
-#include<string>
 #include<vector>
 using std::cin;
 using std::cout;
@@ -148,10 +147,10 @@ void dijkstra(int **graph, int n, int target) {
             a = parent[a];
         }
         temp += addresses[target];
-        cout << "Shortest path is " << temp << " with total cost " << distance[target] << endl; 
+        cout << "Shortest path is " << temp << " with total cost: " << distance[target] << endl; 
     }
     else {
-        cout << "Shortest distance from cafe to " << addresses[target] << " is " << distance[target] << endl;
+        cout << "Shortest distance from cafe to " << addresses[target] << " is: " << distance[target] << endl;
     }
 }
 
