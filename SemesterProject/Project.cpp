@@ -481,7 +481,7 @@ void memberOrder() {
     int choice, option;
     ordering();
     for (int i = 0; i < orderRec.size(); i++) {
-        tempOrder += orderRec[i] + ", ";
+        tempOrder += orderRec[i] + "\n ";
     }
     cout << "\nDine-in -> 1 \nDelivery -> 2 \nExit -> 3: ";
     cin >> option;
@@ -533,7 +533,7 @@ void nonMemberOrder() {
     int choice, option;
     ordering();
     for (int i = 0; i < orderRec.size(); i++) {
-        tempOrder += orderRec[i] + ", ";
+        tempOrder += orderRec[i] + "\n ";
     }
     cout << "\nDine-in -> 1 \nDelivery -> 2 \nExit -> 3: ";
     cin >> option;
